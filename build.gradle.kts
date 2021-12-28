@@ -27,6 +27,7 @@ dependencies {
     val gdxVersion = "1.9.12"
     val exposedVersion = "0.34.1"
     val pahoVersion = "1.2.0"
+    val colMessageVersion = "0.0.0.13"
 
     api(group = "com.badlogicgames.gdx", name = "gdx-backend-lwjgl", version = gdxVersion)
     api(group = "com.badlogicgames.gdx", name = "gdx-platform", version = gdxVersion, classifier = "natives-desktop")
@@ -56,7 +57,10 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
 
-    implementation("com.github.miong:CardsOfLegendsMessages:main-SNAPSHOT")
+    implementation("com.github.miong:CardsOfLegendsMessages:$colMessageVersion")
+
+    implementation("com.badlogicgames.gdx:gdx-freetype:$gdxVersion")
+    implementation("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop")
 
 }
 
@@ -85,7 +89,7 @@ tasks {
 }
 
 launch4j {
-    mainClassName = "com.bubul.col.launcher.MainKt"
+    mainClassName = "com.bubul.col.game.MainKt"
     dontWrapJar = true
     jarTask = project.tasks.jar.get()
 }

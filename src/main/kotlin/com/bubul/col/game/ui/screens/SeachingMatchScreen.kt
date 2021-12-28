@@ -1,4 +1,7 @@
 package com.bubul.col.game.ui.screens
 
-class SeachingMatchScreen {
+import ktx.app.KtxScreen
+
+class SeachingMatchScreen : KtxScreen {
+
 }

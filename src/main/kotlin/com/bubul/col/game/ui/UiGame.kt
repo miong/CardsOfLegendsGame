@@ -1,33 +1,36 @@
 package com.bubul.col.game.ui
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.files.FileHandle
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Pixmap
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.bubul.col.game.ui.screens.DesktopScreen
+import com.bubul.col.game.ui.screens.LoginScreen
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.scene2d.Scene2DSkin
-import ktx.style.button
-import ktx.style.label
-import ktx.style.progressBar
-import java.nio.file.Paths
+
 
 class UiGame(private val uiApp: UiApp) : KtxGame<KtxScreen>() {
 
     var uiReady = false
 
-    fun init()
-    {
+    lateinit var loginScreen: LoginScreen
+    lateinit var desktopScreen: DesktopScreen
 
+    fun init() {
+        loginScreen = LoginScreen()
+        addScreen(loginScreen)
+        desktopScreen = DesktopScreen()
+        addScreen(desktopScreen)
     }
 
-    override fun create()
-    {
+    override fun create() {
+        val atlas = TextureAtlas(getGameResource("neon_skin/neon-ui.atlas"))
+        val neonSkin = Skin(getGameResource("neon_skin/neon-ui.json"), atlas)
+        Scene2DSkin.defaultSkin = neonSkin
+
+        loginScreen.init()
+        desktopScreen.init()
+        setScreen<LoginScreen>()
         super.create()
         uiReady = true
     }
@@ -36,9 +39,8 @@ class UiGame(private val uiApp: UiApp) : KtxGame<KtxScreen>() {
         uiApp.onExit()
     }
 
-    fun exit() {
-        uiApp.onExit()
-        Gdx.app.exit()
+    fun showDesktop() {
+        setScreen<DesktopScreen>()
     }
 
 }

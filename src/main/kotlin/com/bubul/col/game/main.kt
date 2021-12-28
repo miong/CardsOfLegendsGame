@@ -2,5 +2,12 @@ package com.bubul.col.game
 
 fun main() {
     val starter = GameStarter()
-    starter.startGame()
+    try {
+        starter.startGame()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        starter.quitGame()
+        throw e
+    }
+
 }

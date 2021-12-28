@@ -1,4 +1,6 @@
 package com.bubul.col.game.ui.screens
 
-class DraftScreen {
+import ktx.app.KtxScreen
+
+class DraftScreen : KtxScreen {
 }

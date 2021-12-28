@@ -1,4 +1,6 @@
 package com.bubul.col.game.ui.screens
 
-class RunningGameScreen {
+import ktx.app.KtxScreen
+
+class RunningGameScreen : KtxScreen {
 }

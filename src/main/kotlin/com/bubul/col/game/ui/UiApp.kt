@@ -4,21 +4,24 @@ import com.badlogic.gdx.Application
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 
-open class UiAppStateListerner  {
+open class UiAppStateListener {
     open fun onExit() {}
 }
 
-class UiApp(private val listener: UiAppStateListerner) {
-    private lateinit var app  : LwjglApplication
+class UiApp(private val listener: UiAppStateListener) {
+    private lateinit var app: LwjglApplication
     val ui = UiGame(this)
 
-    fun startUi() {
+    fun init() {
         ui.init()
+    }
+
+    fun startUi() {
         val config = LwjglApplicationConfiguration().apply {
             title = "CardsOfLegends"
             width = 800
             height = 480
-            resizable = true
+            resizable = false
         }
         app = LwjglApplication(ui, config)
         app.logLevel = Application.LOG_DEBUG
@@ -26,12 +29,8 @@ class UiApp(private val listener: UiAppStateListerner) {
 
     fun waitReady() {
         while(!ui.uiReady){
-            Thread.sleep(10)
+            Thread.sleep(1000)
         }
-    }
-
-    fun exit() {
-        ui.exit()
     }
 
     fun onExit() {
