@@ -315,7 +315,10 @@ class LobbyManager(val entityId: String, val mqttClient: MqttClient, val friendM
     }
 
     fun getAdversaryId(): String {
-        return lobby.getAdversaryId()!!
+        lobby.getAdversaryId()?.let {
+            return it
+        }
+        return entityId
     }
 
     fun isLobbyOwner(): Boolean {

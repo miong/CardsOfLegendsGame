@@ -27,7 +27,7 @@ class LoginPresenterImpl(val game: GamePresenter, private val screen: LoginScree
     }
 
     fun init() {
-        screen.presenter = this
+        screen.setPresenter(this)
     }
 
     fun dispose() {

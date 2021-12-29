@@ -49,6 +49,11 @@ interface DesktopPresenter {
     fun stopSearchingAdversary()
     fun acceptGameProposal()
     fun refuseGameProposal()
+    fun onDraftAborted()
+}
+
+interface DraftPresenter {
+    fun draftAborted()
 }
 
 class GamePresenter(private val uiGame: UiGame) {
@@ -56,16 +61,19 @@ class GamePresenter(private val uiGame: UiGame) {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
     val loginPresenter = LoginPresenterImpl(this, uiGame.loginScreen)
     val desktopPresenter = DesktopPresenterImpl(this, uiGame.desktopScreen)
+    val draftPresenter = DraftPresenterImpl(this, uiGame.draftScreen)
     private var desktopSetup = false
 
     fun init() {
         loginPresenter.init()
         desktopPresenter.init()
+        draftPresenter.init()
     }
 
     fun dispose() {
         loginPresenter.dispose()
         desktopPresenter.dispose()
+        draftPresenter.dispose()
     }
 
     fun showDesktop() {
@@ -80,7 +88,12 @@ class GamePresenter(private val uiGame: UiGame) {
 
     fun startGame(type: GameType, adversaryId: String, serverSide: Boolean) {
         logger.info("start $type game against $adversaryId as server $serverSide")
-        TODO("not implemented yet")
+        uiGame.showDraft()
+    }
+
+    fun draftAborted() {
+        desktopPresenter.onDraftAborted()
+        showDesktop()
     }
 
 }

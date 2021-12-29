@@ -269,6 +269,10 @@ class DesktopPresenterImpl(val gamePresenter: GamePresenter, val screen: Desktop
         screen.unshowMatchMaking()
     }
 
+    override fun onDraftAborted() {
+        setUpdateView()
+    }
+
     override fun getChatListener(): ChatListener {
         return object : ChatListener {
             override fun setMessages(messages: List<Pair<String, String>>) {

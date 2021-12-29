@@ -30,7 +30,7 @@ class LoginScreen : KtxScreen {
     lateinit var pingLabel: Label
     private lateinit var errorMessageDialog: Dialog
 
-    lateinit var presenter: LoginPresenter
+    private lateinit var presenter: LoginPresenter
 
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
 
@@ -131,6 +131,10 @@ class LoginScreen : KtxScreen {
             logger.error("Can't load resources")
             logger.error(e.toString())
         }
+    }
+
+    fun setPresenter(aPresenter: LoginPresenter) {
+        presenter = aPresenter
     }
 
     fun showErrorMessage(msg: String) {
