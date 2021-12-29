@@ -10,3 +10,10 @@ fun getGameResource(resPath: String): FileHandle? {
         file = Gdx.files.absolute(Paths.get("", "resources/$resPath").toAbsolutePath().toString())
     return file
 }
+
+fun getLoggerConfiguration(): String {
+    var file = Paths.get("", "log4j2.xml").toAbsolutePath().toFile()
+    if (!file.exists())
+        file = Paths.get("", "resources/log4j2.xml").toAbsolutePath().toFile()
+    return file.absolutePath
+}

@@ -49,8 +49,10 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.xerial:sqlite-jdbc:3.30.1")
 
-    implementation("org.slf4j:slf4j-api:1.7.25")
-    implementation("org.slf4j:slf4j-simple:1.6.1")
+    implementation("org.slf4j:slf4j-api:1.7.30")
+    implementation("org.apache.logging.log4j:log4j-api:2.17.1")
+    implementation("org.apache.logging.log4j:log4j-core:2.17.1")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.17.1")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:$pahoVersion")

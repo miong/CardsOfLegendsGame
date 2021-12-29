@@ -1,5 +1,6 @@
 package com.bubul.col.game.presenter
 
+import com.badlogic.gdx.Gdx
 import com.bubul.col.game.core.net.*
 import com.bubul.col.game.core.utils.LiveData
 import com.bubul.col.game.ui.UiGame
@@ -83,12 +84,12 @@ class GamePresenter(private val uiGame: UiGame) {
             desktopSetup = true
         }
         logger.info("show desktop")
-        uiGame.showDesktop()
+        Gdx.app.postRunnable { uiGame.showDesktop() }
     }
 
     fun startGame(type: GameType, adversaryId: String, serverSide: Boolean) {
         logger.info("start $type game against $adversaryId as server $serverSide")
-        uiGame.showDraft()
+        Gdx.app.postRunnable { uiGame.showDraft() }
     }
 
     fun draftAborted() {

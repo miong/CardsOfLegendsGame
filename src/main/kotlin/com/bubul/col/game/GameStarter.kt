@@ -26,6 +26,10 @@ class GameStarter {
     }
 
     fun quitGame() {
-        game.dispose()
+        try {
+            game.dispose()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
