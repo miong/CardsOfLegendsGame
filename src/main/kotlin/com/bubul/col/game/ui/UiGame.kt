@@ -44,6 +44,10 @@ class UiGame(private val uiApp: UiApp) : KtxGame<KtxScreen>() {
         uiApp.onExit()
     }
 
+    fun quit() {
+        uiApp.quit()
+    }
+
     fun showDesktop() {
         setScreen<DesktopScreen>()
     }
@@ -51,5 +55,4 @@ class UiGame(private val uiApp: UiApp) : KtxGame<KtxScreen>() {
     fun showDraft() {
         setScreen<DraftScreen>()
     }
-
 }

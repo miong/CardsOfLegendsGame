@@ -1,6 +1,8 @@
 package com.bubul.col.game.ui.screens
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -11,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.Align
 import com.bubul.col.game.presenter.LoginPresenter
 import com.bubul.col.game.ui.getGameResource
 import ktx.actors.plusAssign
@@ -157,5 +160,42 @@ class LoginScreen : KtxScreen {
     override fun hide() {
         stage.clear()
         super.hide()
+    }
+
+    fun showInitializationError() {
+        val window = scene2d.window("") {
+            table {
+                label(
+                    "An initialization error had occurred.\n This means that the game\ndata are corrupted.\nThe game will fix itself\nwhen relaunched.",
+                    "gold-title"
+                ) {
+                    setAlignment(Align.center)
+                    wrap = true
+                    it.expand().fill()
+                }
+                row()
+                button {
+                    label("Quit game", "gold-title")
+                }.apply {
+                    addListener(object : ClickListener() {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                            presenter.forceQuitAndUpload()
+                        }
+                    })
+                }
+                it.expand().fill()
+            }.apply {
+                setFillParent(true)
+                val backPixmap = Pixmap(16, 16, Pixmap.Format.RGBA8888)
+                backPixmap.setColor(Color.FIREBRICK)
+                backPixmap.fill()
+                background = TextureRegionDrawable(TextureRegion(Texture(backPixmap)))
+            }
+        }.apply {
+            isModal = true
+            setSize(750f, 430f)
+            setPosition(this@LoginScreen.stage.width / 2 - width / 2, this@LoginScreen.stage.height / 2 - height / 2)
+        }
+        stage += window
     }
 }

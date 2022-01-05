@@ -1,5 +1,6 @@
 package com.bubul.col.game.presenter
 
+import com.badlogic.gdx.Gdx
 import com.bubul.col.game.core.net.LoginListener
 import com.bubul.col.game.core.net.LoginManager
 import com.bubul.col.game.core.net.LoginStatus
@@ -72,6 +73,17 @@ class LoginPresenterImpl(val game: GamePresenter, private val screen: LoginScree
 
     override fun setLoginManager(aLoginManager: LoginManager) {
         loginManager = aLoginManager
+    }
+
+    override fun showInitializationError() {
+        Gdx.app.postRunnable {
+            screen.showInitializationError()
+        }
+    }
+
+    override fun forceQuitAndUpload() {
+        loginManager!!.forceGameUpdate();
+        game.quitGame()
     }
 
     override fun onLogin() {

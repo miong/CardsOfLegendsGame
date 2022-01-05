@@ -35,12 +35,16 @@ class UiApp(private val listener: UiAppStateListener) {
     }
 
     fun waitReady() {
-        while(!ui.uiReady){
+        while (!ui.uiReady) {
             Thread.sleep(1000)
         }
     }
 
     fun onExit() {
         listener.onExit()
+    }
+
+    fun quit() {
+        app.exit()
     }
 }

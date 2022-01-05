@@ -1,5 +1,6 @@
 package com.bubul.col.game.core
 
+import com.bubul.col.game.core.game.cards.CardManager
 import com.bubul.col.game.core.net.NetManager
 import com.bubul.col.game.presenter.GamePresenter
 import org.slf4j.LoggerFactory
@@ -14,9 +15,10 @@ class GameManager {
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
     private val entityId = UUID.randomUUID().toString()
     private val netManager = NetManager(entityId)
+    private val cardManager = CardManager()
 
 
-    fun init(aPresenter: GamePresenter) {
+    fun init(aPresenter: GamePresenter): Boolean {
         gamePresenter = aPresenter
         gameRunning = true
         logger.info("Initializing the game")
@@ -27,7 +29,12 @@ class GameManager {
         netManager.getFriendManager().setListener(gamePresenter.desktopPresenter.getFriendListener())
         netManager.getChatManager().setListener(gamePresenter.desktopPresenter.getChatListener())
         netManager.getLobbyManager().setListener(gamePresenter.desktopPresenter.getLobbyListener())
+        if (!cardManager.init()) {
+            logger.info("Initialization failed")
+            return false
+        }
         logger.info("Initialization done")
+        return true
     }
 
     fun setupGamePresenterData() {

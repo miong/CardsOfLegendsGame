@@ -10,7 +10,7 @@ class GameStarter {
     private val game = GameManager()
     private val app = UiApp(object : UiAppStateListener() {
         override fun onExit() {
-            game.dispose()
+            quitGame()
         }
     })
     private lateinit var presenter: GamePresenter
@@ -18,11 +18,14 @@ class GameStarter {
     fun startGame() {
         app.init()
         presenter = GamePresenter(app.ui)
-        game.init(presenter)
+        val initRes = game.init(presenter)
         app.startUi()
         app.waitReady()
         presenter.init()
         game.setupGamePresenterData()
+        if (!initRes) {
+            presenter.showInitializationError()
+        }
     }
 
     fun quitGame() {

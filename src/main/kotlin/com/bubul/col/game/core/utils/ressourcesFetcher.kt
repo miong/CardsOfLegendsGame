@@ -11,9 +11,16 @@ fun getGameResource(resPath: String): FileHandle? {
     return file
 }
 
-fun getLoggerConfiguration(): String {
+fun getLoggerConfigurationPath(): String {
     var file = Paths.get("", "log4j2.xml").toAbsolutePath().toFile()
     if (!file.exists())
         file = Paths.get("", "resources/log4j2.xml").toAbsolutePath().toFile()
+    return file.absolutePath
+}
+
+fun getResourcePath(internalPath: String): String {
+    var file = Paths.get("", internalPath).toAbsolutePath().toFile()
+    if (!file.exists())
+        file = Paths.get("", "resources/$internalPath").toAbsolutePath().toFile()
     return file.absolutePath
 }

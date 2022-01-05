@@ -19,6 +19,8 @@ interface LoginPresenter {
     fun onLogin()
     fun onRegister()
     fun setLoginManager(aLoginManager: LoginManager)
+    fun showInitializationError()
+    fun forceQuitAndUpload()
 }
 
 interface DesktopPresenter {
@@ -95,6 +97,14 @@ class GamePresenter(private val uiGame: UiGame) {
     fun draftAborted() {
         desktopPresenter.onDraftAborted()
         showDesktop()
+    }
+
+    fun showInitializationError() {
+        loginPresenter.showInitializationError()
+    }
+
+    fun quitGame() {
+        uiGame.quit()
     }
 
 }

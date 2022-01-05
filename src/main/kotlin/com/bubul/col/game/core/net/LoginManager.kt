@@ -2,8 +2,10 @@ package com.bubul.col.game.core.net
 
 import com.bubul.col.game.core.net.mqtt.MessageListener
 import com.bubul.col.game.core.net.mqtt.MqttClient
+import com.bubul.col.game.ui.getResourcePath
 import com.bubul.col.messages.login.*
 import org.slf4j.LoggerFactory
+import java.io.File
 import java.security.MessageDigest
 import java.util.*
 import javax.xml.bind.DatatypeConverter
@@ -95,5 +97,11 @@ class LoginManager(val entityId: String, val mqttClient: MqttClient) {
             val msg = LogoutMsg(entityId, loggedId!!)
             mqttClient.publish(msg)
         }
+    }
+
+    fun forceGameUpdate() {
+        val versioningFile = File(getResourcePath("dataversioning.db"))
+        if (versioningFile.exists())
+            versioningFile.delete()
     }
 }
