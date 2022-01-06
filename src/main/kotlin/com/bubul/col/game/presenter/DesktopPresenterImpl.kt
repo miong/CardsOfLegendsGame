@@ -1,9 +1,13 @@
 package com.bubul.col.game.presenter
 
 import com.badlogic.gdx.Gdx
+import com.bubul.col.game.core.game.cards.CardManager
+import com.bubul.col.game.core.game.cards.CardType
 import com.bubul.col.game.core.net.*
 import com.bubul.col.game.core.utils.LiveData
 import com.bubul.col.game.core.utils.LiveDataListener
+import com.bubul.col.game.ui.elements.cards.CardView
+import com.bubul.col.game.ui.elements.cards.CardViewFactory
 import com.bubul.col.game.ui.screens.DesktopScreen
 import com.bubul.col.game.ui.screens.FriendStatus
 import org.slf4j.LoggerFactory
@@ -18,6 +22,7 @@ class DesktopPresenterImpl(val gamePresenter: GamePresenter, val screen: Desktop
     private var chatManager: ChatManager? = null
     private var lobbyManager: LobbyManager? = null
     private var loginManager: LoginManager? = null
+    private var cardsManager: CardManager? = null
     private var currentChatDestination: String? = null
     private var serverPing: LiveData<Long>? = null
     private val logger = LoggerFactory.getLogger(this.javaClass.name)
@@ -111,6 +116,26 @@ class DesktopPresenterImpl(val gamePresenter: GamePresenter, val screen: Desktop
         lobbyManager!!.setLobbyOpen(false, false)
         screen.resetLobby(lobbyManager!!.getAdversaryName())
         Gdx.app.postRunnable { screen.switchElemToUpdateView() }
+    }
+
+    override fun setLibraryView() {
+        lobbyManager!!.setLobbyOpen(false, false)
+        screen.resetLobby(lobbyManager!!.getAdversaryName())
+        Gdx.app.postRunnable { screen.switchElemToLibraryView() }
+    }
+
+    override fun setCardManager(aCardManager: CardManager) {
+        cardsManager = aCardManager
+        screen.initLibrary()
+    }
+
+    override fun getRootCards(type: String): List<CardView> {
+        return when (type) {
+            "Heroes" -> CardViewFactory.fromList(cardsManager!!.getCards()[CardType.Hero])
+            "Spells" -> CardViewFactory.fromList(cardsManager!!.getCards()[CardType.InvocatorSpell])
+            "Passives" -> CardViewFactory.fromList(cardsManager!!.getCards()[CardType.InvocatorPassive])
+            else -> listOf()
+        }
     }
 
     override fun setChatManager(aChatManager: ChatManager) {

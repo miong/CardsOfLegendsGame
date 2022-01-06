@@ -24,6 +24,7 @@ import com.bubul.col.game.core.utils.LiveDataListener
 import com.bubul.col.game.core.utils.loadDecomposedGif
 import com.bubul.col.game.presenter.DesktopPresenter
 import com.bubul.col.game.ui.elements.desktop.DesktopGameTypeSelectorElem
+import com.bubul.col.game.ui.elements.desktop.DesktopLibraryElem
 import com.bubul.col.game.ui.elements.desktop.DesktopLobbyElem
 import com.bubul.col.game.ui.elements.desktop.DesktopUpdatesElem
 import com.bubul.col.game.ui.getGameResource
@@ -51,6 +52,7 @@ class DesktopScreen : KtxScreen {
     private lateinit var updateElem: DesktopUpdatesElem
     private lateinit var gameTypeSelectorElem: DesktopGameTypeSelectorElem
     private lateinit var lobbyElem: DesktopLobbyElem
+    private lateinit var libraryElem: DesktopLibraryElem
     lateinit var pingLabel: Label
     lateinit var usernameLabel: Label
     private lateinit var friendTable: Table
@@ -68,6 +70,7 @@ class DesktopScreen : KtxScreen {
     private lateinit var inviteAdversaryNameLabel: Label
     private lateinit var friendRequestNbLabel: Label
     private lateinit var playBtn: Button
+    private lateinit var libraryBtn: Button
     private lateinit var inviteButton: Button
 
     private var matchMakingWindow: Window? = null
@@ -98,6 +101,18 @@ class DesktopScreen : KtxScreen {
                     addListener(object : ClickListener() {
                         override fun clicked(event: InputEvent?, x: Float, y: Float) {
                             presenter.setGameTypeView()
+                        }
+                    })
+                    it.left()
+                    it.width(100f)
+                    it.top()
+                    it.left()
+                }
+                libraryBtn = button {
+                    label("Library")
+                    addListener(object : ClickListener() {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                            presenter.setLibraryView()
                         }
                     })
                     it.left()
@@ -351,6 +366,7 @@ class DesktopScreen : KtxScreen {
             }
         }
         playBtn.isDisabled = true
+        libraryBtn.isDisabled = true
         chatTable.isVisible = false
         val blueBackPixmap = Pixmap(16, 16, Pixmap.Format.RGBA8888)
         blueBackPixmap.setColor(Color.FIREBRICK)
@@ -588,6 +604,12 @@ class DesktopScreen : KtxScreen {
         lobbyElem.setMyName(myName)
         containerTable.clear()
         containerTable.add(lobbyElem.getUI()).expand().fill()
+    }
+
+    fun switchElemToLibraryView() {
+        libraryElem.reset()
+        containerTable.clear()
+        containerTable.add(libraryElem.getUI()).expand().fill()
     }
 
     fun clearMessages() {
@@ -910,5 +932,8 @@ class DesktopScreen : KtxScreen {
         matchMakingContainerTable.add(matchMakingProposalTable)
     }
 
-
+    fun initLibrary() {
+        libraryElem = DesktopLibraryElem(presenter)
+        libraryBtn.isDisabled = false
+    }
 }

@@ -1,9 +1,11 @@
 package com.bubul.col.game.presenter
 
 import com.badlogic.gdx.Gdx
+import com.bubul.col.game.core.game.cards.CardManager
 import com.bubul.col.game.core.net.*
 import com.bubul.col.game.core.utils.LiveData
 import com.bubul.col.game.ui.UiGame
+import com.bubul.col.game.ui.elements.cards.CardView
 import org.slf4j.LoggerFactory
 
 enum class GameType {
@@ -53,6 +55,10 @@ interface DesktopPresenter {
     fun acceptGameProposal()
     fun refuseGameProposal()
     fun onDraftAborted()
+    fun setLibraryView()
+    fun setCardManager(aCardManager: CardManager)
+    fun getRootCards(type: String): List<CardView>
+
 }
 
 interface DraftPresenter {

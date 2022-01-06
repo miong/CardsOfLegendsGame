@@ -93,6 +93,8 @@ tasks {
 launch4j {
     mainClassName = "com.bubul.col.game.MainKt"
     dontWrapJar = true
+    mutexName = "col.lock"
+    windowTitle = "CardsOfLegends"
     jarTask = project.tasks.jar.get()
 }
 

@@ -45,6 +45,7 @@ class GameManager {
         gamePresenter.desktopPresenter.setFriendManager(netManager.getFriendManager())
         gamePresenter.desktopPresenter.setLoginManager(netManager.getLoginManager())
         gamePresenter.desktopPresenter.setLobbyManager(netManager.getLobbyManager())
+        gamePresenter.desktopPresenter.setCardManager(cardManager)
     }
 
     fun dispose() {
