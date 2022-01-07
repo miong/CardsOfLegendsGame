@@ -21,13 +21,12 @@ class CardSerialization {
         serializersModule = SerializersModule {
             polymorphic(CardBase::class) {
                 subclass(Hero::class, Hero.serializer())
-            }
-            polymorphic(SpellBase::class) {
-                // - InvocatorSpellBase
                 subclass(InvocatorMoveSpell::class, InvocatorMoveSpell.serializer())
                 subclass(InvocatorResourceSpell::class, InvocatorResourceSpell.serializer())
                 subclass(InvocatorDefenceSpell::class, InvocatorDefenceSpell.serializer())
                 subclass(InvocatorAttackSpell::class, InvocatorAttackSpell.serializer())
+            }
+            polymorphic(SpellBase::class) {
                 // - StillSpell
                 subclass(StillAttackSpell::class, StillAttackSpell.serializer())
                 subclass(StillDefenseSpell::class, StillDefenseSpell.serializer())
