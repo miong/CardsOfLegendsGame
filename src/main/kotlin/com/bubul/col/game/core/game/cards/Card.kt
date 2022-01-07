@@ -180,7 +180,13 @@ data class InvocatorResourceSpell(
     override val spiritIncome: Int
 ) : ResourceSpellBase, InvocatorSpellBase
 
-interface MoveSpellBase : SpellBase
+interface MoveSpellBase : SpellBase {
+    val ignoreDamage: Boolean
+    val distance: Int
+    val isForcedBack: Boolean
+    val isForcedFront: Boolean
+    val isTwoPlayerSwaping: Boolean
+}
 
 @Serializable
 @SerialName("InvocatorMoveSpell")
@@ -191,7 +197,11 @@ data class InvocatorMoveSpell(
     override val picturePath: String,
     override val tick: Int,
     override val spiritCost: Int,
-    val ignoreDamage: Boolean
+    override val ignoreDamage: Boolean,
+    override val distance: Int,
+    override val isForcedBack: Boolean,
+    override val isForcedFront: Boolean,
+    override val isTwoPlayerSwaping: Boolean
 ) : MoveSpellBase, InvocatorSpellBase
 
 interface PassiveAptitude : CardBase {
