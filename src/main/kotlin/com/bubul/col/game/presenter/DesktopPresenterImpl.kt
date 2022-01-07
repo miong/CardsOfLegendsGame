@@ -134,10 +134,9 @@ class DesktopPresenterImpl(val gamePresenter: GamePresenter, val screen: Desktop
         if (cardViews.isEmpty()) {
             cardViews["Heroes"] = CardViewFactory.fromList(cardsManager!!.getCards()[CardType.Hero])
             cardViews["Spells"] = CardViewFactory.fromList(cardsManager!!.getCards()[CardType.InvocatorSpell])
-            cardViews["Passives"] = CardViewFactory.fromList(cardsManager!!.getCards()[CardType.InvocatorPassive])
         }
         cardViews[type]?.let {
-            return it!!
+            return it
         }
         return listOf()
     }

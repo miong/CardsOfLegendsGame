@@ -14,8 +14,7 @@ enum class CardType {
     Hero,
     HeroSpell,
     HeroPassive,
-    InvocatorSpell,
-    InvocatorPassive
+    InvocatorSpell
 }
 
 interface SpellBase : CardBase {

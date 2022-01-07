@@ -32,8 +32,7 @@ class CardManager {
                     heroCardsHolder[CardType.InvocatorSpell]?.add(card)
                 }
                 else -> {
-                    //InvocatorPassives
-                    heroCardsHolder[CardType.InvocatorPassive]?.add(card)
+                    logger.error("Unknown root card type for ${card.id}:${card.name}")
                 }
             }
         }

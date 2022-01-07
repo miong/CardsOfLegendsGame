@@ -53,7 +53,6 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
             typeSelector = selectBox<String> {
                 -"Heroes"
                 -"Spells"
-                -"Passives"
             }.cell(expandX = true, fillX = true).apply {
                 addListener(object : ChangeListener() {
                     override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -110,10 +109,10 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
                             viewContainer.add(closeBtn).expandX().center()
                         }
                     })
-                    viewContainer.add(ui).size(70f, 70f).pad(5f).top().left()
-                    viewContainer.align(Align.top or Align.left)
+                    viewContainer.add(ui).size(75f, 70f).pad(5f)
+                    viewContainer.align(Align.top)
                     count++
-                    if (count == 6) {
+                    if (count == 4) {
                         viewContainer.row()
                         count = 0
                     }
