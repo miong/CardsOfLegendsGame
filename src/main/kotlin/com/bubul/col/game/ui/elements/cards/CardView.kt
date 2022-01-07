@@ -56,8 +56,8 @@ open class CardView(private val card: CardBase) {
     fun getNameLabel(): Label {
         return scene2d.label(card.name, "gold-title").apply {
             setAlignment(Align.center)
-            this.fontScaleY = 0.5f
-            this.fontScaleX = 0.5f
+            this.fontScaleY = 0.45f
+            this.fontScaleX = 0.45f
         }
     }
 }

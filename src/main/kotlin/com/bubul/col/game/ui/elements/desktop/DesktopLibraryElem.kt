@@ -85,9 +85,9 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
                         row()
                         add(cardView.getNameLabel().apply {
                             wrap = true
-                        }).size(70f, 15f)
+                        }).size(75f, 15f)
                     }.apply {
-                        setSize(70f, 70f)
+                        setSize(75f, 70f)
                     }
                     ui.touchable = Touchable.enabled
                     ui.addListener(object : ClickListener() {
@@ -110,7 +110,7 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
                             viewContainer.add(closeBtn).expandX().center()
                         }
                     })
-                    viewContainer.add(ui).size(50f, 70f).pad(5f).top().left()
+                    viewContainer.add(ui).size(70f, 70f).pad(5f).top().left()
                     viewContainer.align(Align.top or Align.left)
                     count++
                     if (count == 6) {
