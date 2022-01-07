@@ -80,7 +80,7 @@ open class InvocationView(private val card: Invocation) : CardView(card) {
                 it.pad(2f)
             }
             row()
-            image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-shield-64.png"))))) {
+            image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-plastron-d'armure-64.png"))))) {
                 it.size(30f)
             }
             label(card.baseArmor.toString(), "gold-title")
@@ -295,6 +295,19 @@ class HeroGrowingDefenceSpellView(private val card: GrowingDefenceSpell) : Defen
     }
 }
 
+open class ReinforcementSpellView(private val card: ReinforcementSpellBase) : HeroSpellView(card) {
+    init {
+        CardElementBuilder.addReinforcementElement(libraryUITable, card)
+    }
+}
+
+class HeroStillReinforcementSpellView(private val card: StillReinforcementSpell) : ReinforcementSpellView(card)
+class HeroGrowingReinforcementSpellView(private val card: GrowingReinforcementSpell) : ReinforcementSpellView(card) {
+    init {
+        CardElementBuilder.addGrowingElement(libraryUITable, card)
+    }
+}
+
 open class InvocatorSpellView(private val card: InvocatorSpellBase) : SpellView(card)
 open class InvocatorAttackSpellView(private val card: InvocatorAttackSpell) : InvocatorSpellView(card) {
     init {
@@ -315,7 +328,6 @@ open class InvocatorResourceSpellView(private val card: InvocatorResourceSpell) 
 }
 
 open class InvocatorMoveSpellView(private val card: InvocatorMoveSpell) : InvocatorSpellView(card)
-//TODO create move spells
 
 open class PassiveAptitudeView(private val card: PassiveAptitude) : CardView(card) {
     init {
@@ -334,6 +346,12 @@ open class PassiveAptitudeView(private val card: PassiveAptitude) : CardView(car
 class ResourcePassiveAptitudeView(private val card: ResourcePassiveAptitude) : PassiveAptitudeView(card) {
     init {
         CardElementBuilder.addRessourcesElement(libraryUITable, card)
+    }
+}
+
+class ReinforcementPassiveAptitudeView(private val card: ReinforcementPassiveAptitude) : PassiveAptitudeView(card) {
+    init {
+        CardElementBuilder.addReinforcementElement(libraryUITable, card)
     }
 }
 
@@ -394,7 +412,7 @@ class CardElementBuilder {
                     label(card.baseHealing.toString(), "gold-title") {
                         it.pad(2f)
                     }
-                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-shield-64.png"))))) {
+                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-plastron-d'armure-64.png"))))) {
                         it.size(30f)
                     }
                     label(card.baseArmorInc.toString(), "gold-title") {
@@ -423,6 +441,50 @@ class CardElementBuilder {
                     it.size(30f)
                 }
                 label(card.darkFactor.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+            })
+        }
+
+        fun addReinforcementElement(libraryUITable: Table, card: ReinforcementSpellBase) {
+            libraryUITable.row()
+            libraryUITable.add(scene2d.table {
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-aimer-increase-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.hpInc.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-shield-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.shieldInc.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+                row()
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-plastron-d'armure-increase-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.armorInc.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-bulle-increase-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.resistanceInc.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+                row()
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-épée-increase-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.attackInc.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-explosion-increase-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.criticsInc.toString(), "gold-title") {
                     it.pad(2f)
                 }
             })
@@ -474,11 +536,17 @@ class PassiveAptitudeViewFactory {
         fun fromAnyPassive(card: PassiveAptitude): PassiveAptitudeView {
             return when (card) {
                 is ResourcePassiveAptitude -> fromResourcePassiveAptitude(card)
+                is ReinforcementPassiveAptitude -> fromReinforcementPassiveAptitude(card)
                 else -> fromPassiveAptitude(card)
             }
         }
 
-        private fun fromResourcePassiveAptitude(card: ResourcePassiveAptitude): PassiveAptitudeView {
+        private fun fromReinforcementPassiveAptitude(card: ReinforcementPassiveAptitude): ReinforcementPassiveAptitudeView {
+            logger.info("Using ReinforcementPassiveAptitudeView")
+            return ReinforcementPassiveAptitudeView(card)
+        }
+
+        private fun fromResourcePassiveAptitude(card: ResourcePassiveAptitude): ResourcePassiveAptitudeView {
             logger.info("Using ResourcePassiveAptitudeView")
             return ResourcePassiveAptitudeView(card)
         }
@@ -573,8 +641,14 @@ class SpellViewFactory {
                 is AttackSpellBase -> fromHeroStillAttackSpell(card as StillAttackSpell)
                 is DefenceSpellBase -> fromHeroStillDefenceSpell(card as StillDefenseSpell)
                 is ResourceSpellBase -> fromHeroStillResourceSpell(card as StillResourceSpell)
+                is ReinforcementSpellBase -> fromHeroStillReinforcementSpell(card as StillReinforcementSpell)
                 else -> fromSpellBase(card)
             }
+        }
+
+        private fun fromHeroStillReinforcementSpell(card: StillReinforcementSpell): HeroStillReinforcementSpellView {
+            logger.info("Using HeroStillReinforcementSpellView")
+            return HeroStillReinforcementSpellView(card)
         }
 
         private fun fromHeroStillResourceSpell(card: StillResourceSpell): HeroStillResourceSpellView {
@@ -597,8 +671,14 @@ class SpellViewFactory {
                 is AttackSpellBase -> fromHeroGrowingAttackSpell(card as GrowingAttackSpell)
                 is DefenceSpellBase -> fromHeroGrowingDefenceSpell(card as GrowingDefenceSpell)
                 is ResourceSpellBase -> fromHeroGrowingResourceSpell(card as GrowingResourceSpell)
+                is ReinforcementSpellBase -> fromHeroGrowingReinforcementSpell(card as GrowingReinforcementSpell)
                 else -> fromSpellBase(card)
             }
+        }
+
+        private fun fromHeroGrowingReinforcementSpell(card: GrowingReinforcementSpell): HeroGrowingReinforcementSpellView {
+            logger.info("Using HeroGrowingReinforcementSpellView")
+            return HeroGrowingReinforcementSpellView(card)
         }
 
         private fun fromHeroGrowingResourceSpell(card: GrowingResourceSpell): HeroGrowingResourceSpellView {

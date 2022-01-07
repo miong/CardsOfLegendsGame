@@ -32,13 +32,16 @@ class CardSerialization {
                 subclass(StillAttackSpell::class, StillAttackSpell.serializer())
                 subclass(StillDefenseSpell::class, StillDefenseSpell.serializer())
                 subclass(StillResourceSpell::class, StillResourceSpell.serializer())
+                subclass(StillReinforcementSpell::class, StillReinforcementSpell.serializer())
                 // - GrowingSpell
                 subclass(GrowingAttackSpell::class, GrowingAttackSpell.serializer())
                 subclass(GrowingDefenceSpell::class, GrowingDefenceSpell.serializer())
                 subclass(GrowingResourceSpell::class, GrowingResourceSpell.serializer())
+                subclass(GrowingReinforcementSpell::class, GrowingReinforcementSpell.serializer())
             }
             polymorphic(PassiveAptitude::class) {
                 subclass(ResourcePassiveAptitude::class, ResourcePassiveAptitude.serializer())
+                subclass(ReinforcementPassiveAptitude::class, ReinforcementPassiveAptitude.serializer())
             }
         }
     }

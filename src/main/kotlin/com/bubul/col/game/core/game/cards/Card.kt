@@ -137,6 +137,52 @@ data class GrowingResourceSpell(
     override val darkFactor: Float
 ) : ResourceSpellBase, GrowingSpell
 
+interface ReinforcementSpellBase : SpellBase {
+    val hpInc: Int
+    val shieldInc: Int
+    val armorInc: Int
+    val resistanceInc: Int
+    val attackInc: Int
+    val criticsInc: Float
+}
+
+@Serializable
+@SerialName("StillReinforcementSpell")
+data class StillReinforcementSpell(
+    override val id: String,
+    override val name: String,
+    override val description: String,
+    override val picturePath: String,
+    override val tick: Int,
+    override val spiritCost: Int,
+    override val hpInc: Int,
+    override val shieldInc: Int,
+    override val armorInc: Int,
+    override val resistanceInc: Int,
+    override val attackInc: Int,
+    override val criticsInc: Float
+) : ReinforcementSpellBase, StillSpell
+
+@Serializable
+@SerialName("GrowingReinforcementSpell")
+data class GrowingReinforcementSpell(
+    override val id: String,
+    override val name: String,
+    override val description: String,
+    override val picturePath: String,
+    override val tick: Int,
+    override val spiritCost: Int,
+    override val lightFactor: Float,
+    override val darkFactor: Float,
+    override val hpInc: Int,
+    override val shieldInc: Int,
+    override val armorInc: Int,
+    override val resistanceInc: Int,
+    override val attackInc: Int,
+    override val criticsInc: Float
+
+) : ReinforcementSpellBase, GrowingSpell
+
 interface InvocatorSpellBase : SpellBase
 
 @Serializable
@@ -223,12 +269,33 @@ data class ResourcePassiveAptitude(
 
 ) : PassiveAptitude, ResourceSpellBase
 
+@Serializable
+@SerialName("ReinforcementPassiveAptitude")
+data class ReinforcementPassiveAptitude(
+    override val id: String,
+    override val name: String,
+    override val description: String,
+    override val picturePath: String,
+    override val tick: Int,
+    override val spiritCost: Int,
+    override val hpInc: Int,
+    override val shieldInc: Int,
+    override val armorInc: Int,
+    override val resistanceInc: Int,
+    override val attackInc: Int,
+    override val criticsInc: Float,
+    override val cooldown: Int
+) : PassiveAptitude, ReinforcementSpellBase
+
 interface Invocation : CardBase {
     val maxHP: Int
     val currentHP: Int
+    val shield: Int
     val baseArmor: Int
     val baseResistance: Int
     val baseDamage: Int
+    val baseCritics: Float
+
 }
 
 interface Sorcerer : Invocation {
@@ -247,11 +314,14 @@ data class Hero(
     override val picturePath: String,
     override val maxHP: Int,
     override val currentHP: Int,
+    override val shield: Int,
     override val baseArmor: Int,
     override val baseResistance: Int,
     override val baseDamage: Int,
+    override val baseCritics: Float,
     override val spells: Array<SpellBase>,
     override val passives: Array<PassiveAptitude>
+
 ) : Sorcerer, Responable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -265,9 +335,11 @@ data class Hero(
         if (picturePath != other.picturePath) return false
         if (maxHP != other.maxHP) return false
         if (currentHP != other.currentHP) return false
+        if (shield != other.shield) return false
         if (baseArmor != other.baseArmor) return false
         if (baseResistance != other.baseResistance) return false
         if (baseDamage != other.baseDamage) return false
+        if (baseCritics != other.baseCritics) return false
         if (!spells.contentEquals(other.spells)) return false
         if (!passives.contentEquals(other.passives)) return false
 
@@ -281,11 +353,14 @@ data class Hero(
         result = 31 * result + picturePath.hashCode()
         result = 31 * result + maxHP
         result = 31 * result + currentHP
+        result = 31 * result + shield
         result = 31 * result + baseArmor
         result = 31 * result + baseResistance
         result = 31 * result + baseDamage
+        result = 31 * result + baseCritics.hashCode()
         result = 31 * result + spells.contentHashCode()
         result = 31 * result + passives.contentHashCode()
         return result
     }
+
 }
