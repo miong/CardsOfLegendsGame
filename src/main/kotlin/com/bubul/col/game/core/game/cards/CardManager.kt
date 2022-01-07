@@ -37,6 +37,10 @@ class CardManager {
                 }
             }
         }
+        for (type in CardType.values())
+            heroCardsHolder[type]?.sortBy {
+                it.name
+            }
         return true
 
     }

@@ -1,6 +1,9 @@
 package com.bubul.col.game.ui.elements.desktop
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
@@ -8,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.bubul.col.game.presenter.DesktopPresenter
 import ktx.scene2d.*
@@ -28,6 +32,11 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
 
     fun reset() {
         container = scene2d.table {
+            val pixmap = Pixmap(20, 20, Pixmap.Format.RGBA8888).apply {
+                setColor(0f, 0f, 0f, 0.5f)
+                fill()
+            }
+            background = TextureRegionDrawable(TextureRegion(Texture(pixmap)))
             button {
                 label("Close", "gold-title")
                 it.colspan(2)
@@ -71,9 +80,16 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
                 viewContainer.clear()
                 var count = 0;
                 for (cardView in presenter.getRootCards(it)) {
-                    val ui = cardView.getMiniatureImage()
+                    val ui = scene2d.table {
+                        add(cardView.getMiniatureImage()).size(50f).align(Align.center)
+                        row()
+                        add(cardView.getNameLabel().apply {
+                            wrap = true
+                        }).size(70f, 15f)
+                    }.apply {
+                        setSize(70f, 70f)
+                    }
                     ui.touchable = Touchable.enabled
-                    ui.clearListeners()
                     ui.addListener(object : ClickListener() {
                         override fun clicked(event: InputEvent?, x: Float, y: Float) {
                             viewContainer.clear()
@@ -94,7 +110,7 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
                             viewContainer.add(closeBtn).expandX().center()
                         }
                     })
-                    viewContainer.add(ui).size(50f).pad(5f).top().left()
+                    viewContainer.add(ui).size(50f, 70f).pad(5f).top().left()
                     viewContainer.align(Align.top or Align.left)
                     count++
                     if (count == 6) {

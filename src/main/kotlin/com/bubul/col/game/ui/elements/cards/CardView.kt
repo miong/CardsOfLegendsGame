@@ -7,9 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.Align
 import com.bubul.col.game.core.game.cards.*
 
 import com.bubul.col.game.ui.getGameResource
@@ -50,13 +52,21 @@ open class CardView(private val card: CardBase) {
     open fun resetLibraryView() {
 
     }
+
+    fun getNameLabel(): Label {
+        return scene2d.label(card.name, "gold-title").apply {
+            setAlignment(Align.center)
+            this.fontScaleY = 0.5f
+            this.fontScaleX = 0.5f
+        }
+    }
 }
 
 open class InvocationView(private val card: Invocation) : CardView(card) {
     init {
         libraryUITable.row()
         libraryUITable.add(scene2d.table {
-            //TODO use icons
+
             image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-aimer-64.png"))))) {
                 it.size(30f)
             }
@@ -228,7 +238,7 @@ open class SpellView(private val card: SpellBase) : CardView(card) {
     init {
         libraryUITable.row()
         libraryUITable.add(scene2d.table {
-            //TODO use icons
+
             image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-hourglass-64.png"))))) {
                 it.size(30f)
             }
@@ -246,25 +256,179 @@ open class SpellView(private val card: SpellBase) : CardView(card) {
 }
 
 open class HeroSpellView(private val card: SpellBase) : SpellView(card)
-open class ResourceSpellView(private val card: ResourceSpellBase) : HeroSpellView(card)
+open class ResourceSpellView(private val card: ResourceSpellBase) : HeroSpellView(card) {
+    init {
+        CardElementBuilder.addRessourcesElement(libraryUITable, card)
+    }
+}
+
 class HeroStillResourceSpellView(private val card: StillResourceSpell) : ResourceSpellView(card)
-class HeroGrowingResourceSpellView(private val card: GrowingResourceSpell) : ResourceSpellView(card)
-open class AttackSpellView(private val card: AttackSpellBase) : HeroSpellView(card)
+class HeroGrowingResourceSpellView(private val card: GrowingResourceSpell) : ResourceSpellView(card) {
+    init {
+        CardElementBuilder.addGrowingElement(libraryUITable, card)
+    }
+}
+
+open class AttackSpellView(private val card: AttackSpellBase) : HeroSpellView(card) {
+    init {
+        CardElementBuilder.addAttackElement(libraryUITable, card)
+    }
+}
+
 class HeroStillAttackSpellView(private val card: StillAttackSpell) : AttackSpellView(card)
-class HeroGrowingAttackSpellView(private val card: GrowingAttackSpell) : AttackSpellView(card)
-open class DefenceSpellView(private val card: DefenceSpellBase) : HeroSpellView(card)
+class HeroGrowingAttackSpellView(private val card: GrowingAttackSpell) : AttackSpellView(card) {
+    init {
+        CardElementBuilder.addGrowingElement(libraryUITable, card)
+    }
+}
+
+open class DefenceSpellView(private val card: DefenceSpellBase) : HeroSpellView(card) {
+    init {
+        CardElementBuilder.addDefenceElement(libraryUITable, card)
+    }
+}
+
 class HeroStillDefenseSpellView(private val card: StillDefenseSpell) : DefenceSpellView(card)
-class HeroGrowingDefenceSpellView(private val card: GrowingDefenceSpell) : DefenceSpellView(card)
+class HeroGrowingDefenceSpellView(private val card: GrowingDefenceSpell) : DefenceSpellView(card) {
+    init {
+        CardElementBuilder.addGrowingElement(libraryUITable, card)
+    }
+}
 
 open class InvocatorSpellView(private val card: InvocatorSpellBase) : SpellView(card)
-open class InvocatorAttackSpellView(private val card: InvocatorAttackSpell) : InvocatorSpellView(card)
-open class InvocatorDefenceSpellView(private val card: InvocatorDefenceSpell) : InvocatorSpellView(card)
-open class InvocatorResourceSpellView(private val card: InvocatorResourceSpell) : InvocatorSpellView(card)
+open class InvocatorAttackSpellView(private val card: InvocatorAttackSpell) : InvocatorSpellView(card) {
+    init {
+        CardElementBuilder.addAttackElement(libraryUITable, card)
+    }
+}
+
+open class InvocatorDefenceSpellView(private val card: InvocatorDefenceSpell) : InvocatorSpellView(card) {
+    init {
+        CardElementBuilder.addDefenceElement(libraryUITable, card)
+    }
+}
+
+open class InvocatorResourceSpellView(private val card: InvocatorResourceSpell) : InvocatorSpellView(card) {
+    init {
+        CardElementBuilder.addRessourcesElement(libraryUITable, card)
+    }
+}
+
 open class InvocatorMoveSpellView(private val card: InvocatorMoveSpell) : InvocatorSpellView(card)
+//TODO create move spells
 
-open class PassiveAptitudeView(private val card: PassiveAptitude) : CardView(card)
-class ResourcePassiveAptitudeView(private val card: ResourcePassiveAptitude) : PassiveAptitudeView(card)
+open class PassiveAptitudeView(private val card: PassiveAptitude) : CardView(card) {
+    init {
+        libraryUITable.row()
+        libraryUITable.add(scene2d.table {
+            image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-pause-64.png"))))) {
+                it.size(30f)
+            }
+            label(card.cooldown.toString(), "gold-title") {
+                it.pad(2f)
+            }
+        })
+    }
+}
 
+class ResourcePassiveAptitudeView(private val card: ResourcePassiveAptitude) : PassiveAptitudeView(card) {
+    init {
+        CardElementBuilder.addRessourcesElement(libraryUITable, card)
+    }
+}
+
+class CardElementBuilder {
+    companion object {
+        fun addRessourcesElement(libraryUITable: Table, card: ResourceSpellBase) {
+            libraryUITable.row()
+            libraryUITable.add(scene2d.table {
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-gold-bars-increase-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.goldIncome.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-energy-increase-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.spiritIncome.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+            })
+        }
+
+        fun addAttackElement(libraryUITable: Table, card: AttackSpellBase) {
+            libraryUITable.row()
+            libraryUITable.add(scene2d.table {
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-épée-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.baseDamage.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-bandage-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.baseInjury.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+            })
+        }
+
+        fun addDefenceElement(libraryUITable: Table, card: DefenceSpellBase) {
+            libraryUITable.row()
+            libraryUITable.add(scene2d.table {
+                table {
+                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-bandage-64.png"))))) {
+                        it.size(30f)
+                    }
+                    label(card.baseInjury.toString(), "gold-title") {
+                        it.pad(2f)
+                    }
+                }
+                row()
+                table {
+                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-medicine-65.png"))))) {
+                        it.size(30f)
+                    }
+                    label(card.baseHealing.toString(), "gold-title") {
+                        it.pad(2f)
+                    }
+                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-shield-64.png"))))) {
+                        it.size(30f)
+                    }
+                    label(card.baseArmorInc.toString(), "gold-title") {
+                        it.pad(2f)
+                    }
+                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-bulle-64.png"))))) {
+                        it.size(30f)
+                    }
+                    label(card.baseResistanceInc.toString(), "gold-title") {
+                        it.pad(2f)
+                    }
+                }
+            })
+        }
+
+        fun addGrowingElement(libraryUITable: Table, card: GrowingSpell) {
+            libraryUITable.row()
+            libraryUITable.add(scene2d.table {
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-ange-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.lightFactor.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-diabolique-64.png"))))) {
+                    it.size(30f)
+                }
+                label(card.darkFactor.toString(), "gold-title") {
+                    it.pad(2f)
+                }
+            })
+        }
+    }
+}
 
 class CardViewFactory {
     companion object {
@@ -289,8 +453,8 @@ class CardViewFactory {
             logger.info("Create card view for ${card.id}:${card.name}")
             val view = when (card) {
                 is Invocation -> InvocationViewFactory.fromAnyInvocationCard(card)
-                is SpellBase -> SpellViewFactory.fromAnySpell(card)
                 is PassiveAptitude -> PassiveAptitudeViewFactory.fromAnyPassive(card)
+                is SpellBase -> SpellViewFactory.fromAnySpell(card)
                 else -> fromCardBase(card)
             }
             cache[card.id] = view
@@ -305,6 +469,8 @@ class CardViewFactory {
 
 class PassiveAptitudeViewFactory {
     companion object {
+        private val logger = LoggerFactory.getLogger(CardViewFactory::class.java)
+
         fun fromAnyPassive(card: PassiveAptitude): PassiveAptitudeView {
             return when (card) {
                 is ResourcePassiveAptitude -> fromResourcePassiveAptitude(card)
@@ -313,10 +479,12 @@ class PassiveAptitudeViewFactory {
         }
 
         private fun fromResourcePassiveAptitude(card: ResourcePassiveAptitude): PassiveAptitudeView {
+            logger.info("Using ResourcePassiveAptitudeView")
             return ResourcePassiveAptitudeView(card)
         }
 
         private fun fromPassiveAptitude(card: PassiveAptitude): PassiveAptitudeView {
+            logger.info("Using PassiveAptitudeView")
             return PassiveAptitudeView(card)
         }
     }
@@ -324,6 +492,8 @@ class PassiveAptitudeViewFactory {
 
 class InvocationViewFactory {
     companion object {
+        private val logger = LoggerFactory.getLogger(CardViewFactory::class.java)
+
         fun fromAnyInvocationCard(card: Invocation): InvocationView {
             return when (card) {
                 is Sorcerer -> fromAnySorcererCard(card)
@@ -339,14 +509,17 @@ class InvocationViewFactory {
         }
 
         private fun fromSorcererCard(card: Sorcerer): SorcererView {
+            logger.info("Using SorcererView")
             return SorcererView(card)
         }
 
         private fun fromInvocationBase(card: Invocation): InvocationView {
+            logger.info("Using InvocationView")
             return InvocationView(card)
         }
 
         private fun fromHeroCard(card: Hero): HeroCardView {
+            logger.info("Using HeroCardView")
             return HeroCardView(card)
         }
     }
@@ -354,6 +527,8 @@ class InvocationViewFactory {
 
 class SpellViewFactory {
     companion object {
+        private val logger = LoggerFactory.getLogger(CardViewFactory::class.java)
+
         fun fromAnySpell(card: SpellBase): SpellView {
             return when (card) {
                 is InvocatorSpellBase -> fromAnyInvocatorSpell(card)
@@ -374,18 +549,22 @@ class SpellViewFactory {
         }
 
         private fun fromInvocatorStillMoveSpell(card: InvocatorMoveSpell): InvocatorMoveSpellView {
+            logger.info("Using InvocatorMoveSpellView")
             return InvocatorMoveSpellView(card)
         }
 
         private fun fromInvocatorStillResourceSpell(card: InvocatorResourceSpell): InvocatorResourceSpellView {
+            logger.info("Using InvocatorResourceSpellView")
             return InvocatorResourceSpellView(card)
         }
 
         private fun fromInvocatorStillDefenceSpell(card: InvocatorDefenceSpell): InvocatorDefenceSpellView {
+            logger.info("Using InvocatorDefenceSpellView")
             return InvocatorDefenceSpellView(card)
         }
 
         private fun fromInvocatorStillAttackSpell(card: InvocatorAttackSpell): InvocatorAttackSpellView {
+            logger.info("Using InvocatorAttackSpellView")
             return InvocatorAttackSpellView(card)
         }
 
@@ -399,14 +578,17 @@ class SpellViewFactory {
         }
 
         private fun fromHeroStillResourceSpell(card: StillResourceSpell): HeroStillResourceSpellView {
+            logger.info("Using HeroStillResourceSpellView")
             return HeroStillResourceSpellView(card)
         }
 
         private fun fromHeroStillDefenceSpell(card: StillDefenseSpell): HeroStillDefenseSpellView {
+            logger.info("Using HeroStillDefenseSpellView")
             return HeroStillDefenseSpellView(card)
         }
 
         private fun fromHeroStillAttackSpell(card: StillAttackSpell): HeroStillAttackSpellView {
+            logger.info("Using HeroStillAttackSpellView")
             return HeroStillAttackSpellView(card)
         }
 
@@ -420,18 +602,22 @@ class SpellViewFactory {
         }
 
         private fun fromHeroGrowingResourceSpell(card: GrowingResourceSpell): HeroGrowingResourceSpellView {
+            logger.info("Using HeroGrowingResourceSpellView")
             return HeroGrowingResourceSpellView(card)
         }
 
         private fun fromHeroGrowingDefenceSpell(card: GrowingDefenceSpell): HeroGrowingDefenceSpellView {
+            logger.info("Using HeroGrowingDefenceSpellView")
             return HeroGrowingDefenceSpellView(card)
         }
 
         private fun fromHeroGrowingAttackSpell(card: GrowingAttackSpell): HeroGrowingAttackSpellView {
+            logger.info("Using HeroGrowingAttackSpellView")
             return HeroGrowingAttackSpellView(card)
         }
 
         private fun fromSpellBase(card: SpellBase): SpellView {
+            logger.info("Using SpellView")
             return SpellView(card)
         }
     }

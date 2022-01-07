@@ -127,7 +127,7 @@ class DesktopPresenterImpl(val gamePresenter: GamePresenter, val screen: Desktop
 
     override fun setCardManager(aCardManager: CardManager) {
         cardsManager = aCardManager
-        screen.initLibrary()
+        Gdx.app.postRunnable { screen.initLibrary() }
     }
 
     override fun getRootCards(type: String): List<CardView> {
