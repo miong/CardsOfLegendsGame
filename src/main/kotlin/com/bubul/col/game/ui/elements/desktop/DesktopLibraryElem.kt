@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.Align
 import com.bubul.col.game.presenter.DesktopPresenter
 import ktx.scene2d.*
 
@@ -56,6 +57,7 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
                 viewContainer = table {
 
                 }
+                fadeScrollBars = false
                 sp.colspan(2)
                 sp.expand().fill()
             }
@@ -63,16 +65,37 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
         setCardListView("Heroes")
     }
 
-    private fun setCardListView(first: String?) {
+    private fun setCardListView(type: String?) {
         Gdx.app.postRunnable {
-            first?.let {
+            type?.let {
                 viewContainer.clear()
                 var count = 0;
                 for (cardView in presenter.getRootCards(it)) {
-                    val ui = cardView.getMiniature()
+                    val ui = cardView.getMiniatureImage()
                     ui.touchable = Touchable.enabled
                     ui.clearListeners()
+                    ui.addListener(object : ClickListener() {
+                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                            viewContainer.clear()
+                            cardView.resetLibraryView()
+                            viewContainer.add(cardView.getLibraryUI()).expand().fill().row()
+                            val closeBtn = scene2d.button {
+                                label("Return", "gold-title").apply {
+                                    setScale(0.5f)
+                                }
+                            }.apply {
+                                setSize(30f, 20f)
+                                addListener(object : ClickListener() {
+                                    override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                                        setCardListView(type)
+                                    }
+                                })
+                            }
+                            viewContainer.add(closeBtn).expandX().center()
+                        }
+                    })
                     viewContainer.add(ui).size(50f).pad(5f).top().left()
+                    viewContainer.align(Align.top or Align.left)
                     count++
                     if (count == 6) {
                         viewContainer.row()

@@ -19,6 +19,7 @@ enum class CardType {
 }
 
 interface SpellBase : CardBase {
+    val tick: Int
     val spiritCost: Int
 }
 
@@ -29,7 +30,7 @@ interface GrowingSpell : SpellBase {
 
 interface StillSpell : SpellBase
 
-interface AttackSpellBase {
+interface AttackSpellBase : SpellBase {
     val baseDamage: Int
     val baseInjury: Int
 }
@@ -41,6 +42,7 @@ data class GrowingAttackSpell(
     override val name: String,
     override val description: String,
     override val picturePath: String,
+    override val tick: Int,
     override val spiritCost: Int,
     override val lightFactor: Float,
     override val darkFactor: Float,
@@ -55,12 +57,13 @@ data class StillAttackSpell(
     override val name: String,
     override val description: String,
     override val picturePath: String,
+    override val tick: Int,
     override val spiritCost: Int,
     override val baseDamage: Int,
     override val baseInjury: Int
 ) : StillSpell, AttackSpellBase
 
-interface DefenceSpellBase {
+interface DefenceSpellBase : SpellBase {
     val baseHealing: Int
     val baseArmorInc: Int
     val baseResistanceInc: Int
@@ -74,6 +77,7 @@ data class GrowingDefenceSpell(
     override val name: String,
     override val description: String,
     override val picturePath: String,
+    override val tick: Int,
     override val spiritCost: Int,
     override val lightFactor: Float,
     override val darkFactor: Float,
@@ -91,6 +95,7 @@ data class StillDefenseSpell(
     override val name: String,
     override val description: String,
     override val picturePath: String,
+    override val tick: Int,
     override val spiritCost: Int,
     override val baseHealing: Int,
     override val baseArmorInc: Int,
@@ -105,16 +110,34 @@ interface ResourceSpellBase : SpellBase {
 }
 
 @Serializable
-@SerialName("HeroResourceSpell")
-data class HeroResourceSpell(
+@SerialName("StillResourceSpell")
+data class StillResourceSpell(
     override val id: String,
     override val name: String,
     override val description: String,
     override val picturePath: String,
+    override val tick: Int,
     override val spiritCost: Int,
     override val goldIncome: Int,
     override val spiritIncome: Int
-) : ResourceSpellBase
+) : ResourceSpellBase, StillSpell
+
+@Serializable
+@SerialName("GrowingResourceSpell")
+data class GrowingResourceSpell(
+    override val id: String,
+    override val name: String,
+    override val description: String,
+    override val picturePath: String,
+    override val tick: Int,
+    override val spiritCost: Int,
+    override val goldIncome: Int,
+    override val spiritIncome: Int,
+    override val lightFactor: Float,
+    override val darkFactor: Float
+) : ResourceSpellBase, GrowingSpell
+
+interface InvocatorSpellBase : SpellBase
 
 @Serializable
 @SerialName("InvocatorAttackSpell")
@@ -123,10 +146,11 @@ data class InvocatorAttackSpell(
     override val name: String,
     override val description: String,
     override val picturePath: String,
+    override val tick: Int,
     override val spiritCost: Int,
     override val baseDamage: Int,
     override val baseInjury: Int
-) : AttackSpellBase, StillSpell
+) : AttackSpellBase, StillSpell, InvocatorSpellBase
 
 @Serializable
 @SerialName("InvocatorDefenceSpell")
@@ -135,12 +159,13 @@ data class InvocatorDefenceSpell(
     override val name: String,
     override val description: String,
     override val picturePath: String,
+    override val tick: Int,
     override val spiritCost: Int,
     override val baseHealing: Int,
     override val baseArmorInc: Int,
     override val baseResistanceInc: Int,
     override val baseInjury: Int
-) : DefenceSpellBase, StillSpell
+) : DefenceSpellBase, StillSpell, InvocatorSpellBase
 
 @Serializable
 @SerialName("InvocatorResourceSpell")
@@ -149,10 +174,13 @@ data class InvocatorResourceSpell(
     override val name: String,
     override val description: String,
     override val picturePath: String,
+    override val tick: Int,
     override val spiritCost: Int,
     override val goldIncome: Int,
     override val spiritIncome: Int
-) : ResourceSpellBase
+) : ResourceSpellBase, InvocatorSpellBase
+
+interface MoveSpellBase : SpellBase
 
 @Serializable
 @SerialName("InvocatorMoveSpell")
@@ -161,11 +189,29 @@ data class InvocatorMoveSpell(
     override val name: String,
     override val description: String,
     override val picturePath: String,
+    override val tick: Int,
     override val spiritCost: Int,
     val ignoreDamage: Boolean
-) : SpellBase
+) : MoveSpellBase, InvocatorSpellBase
 
-interface PassiveAptitude : CardBase
+interface PassiveAptitude : CardBase {
+    val cooldown: Int
+}
+
+@Serializable
+@SerialName("ResourcePassiveAptitude")
+data class ResourcePassiveAptitude(
+    override val id: String,
+    override val name: String,
+    override val description: String,
+    override val picturePath: String,
+    override val tick: Int,
+    override val spiritCost: Int,
+    override val goldIncome: Int,
+    override val spiritIncome: Int,
+    override val cooldown: Int
+
+) : PassiveAptitude, ResourceSpellBase
 
 interface Invocation : CardBase {
     val maxHP: Int
@@ -179,6 +225,8 @@ interface Sorcerer : Invocation {
     val spells: Array<SpellBase>
     val passives: Array<PassiveAptitude>
 }
+
+interface Responable
 
 @Serializable
 @SerialName("Hero")
@@ -194,7 +242,7 @@ data class Hero(
     override val baseDamage: Int,
     override val spells: Array<SpellBase>,
     override val passives: Array<PassiveAptitude>
-) : Sorcerer {
+) : Sorcerer, Responable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

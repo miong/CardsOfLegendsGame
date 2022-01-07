@@ -29,6 +29,7 @@ class DesktopPresenterImpl(val gamePresenter: GamePresenter, val screen: Desktop
 
     private var type = GameType.Normal
     private val invitesQueue: Queue<String> = LinkedList()
+    private val cardViews = mutableMapOf<String, List<CardView>>()
 
     private val serverPingListener = object : LiveDataListener<Long> {
         override fun onChange(newValue: Long, oldValue: Long) {
@@ -130,12 +131,15 @@ class DesktopPresenterImpl(val gamePresenter: GamePresenter, val screen: Desktop
     }
 
     override fun getRootCards(type: String): List<CardView> {
-        return when (type) {
-            "Heroes" -> CardViewFactory.fromList(cardsManager!!.getCards()[CardType.Hero])
-            "Spells" -> CardViewFactory.fromList(cardsManager!!.getCards()[CardType.InvocatorSpell])
-            "Passives" -> CardViewFactory.fromList(cardsManager!!.getCards()[CardType.InvocatorPassive])
-            else -> listOf()
+        if (cardViews.isEmpty()) {
+            cardViews["Heroes"] = CardViewFactory.fromList(cardsManager!!.getCards()[CardType.Hero])
+            cardViews["Spells"] = CardViewFactory.fromList(cardsManager!!.getCards()[CardType.InvocatorSpell])
+            cardViews["Passives"] = CardViewFactory.fromList(cardsManager!!.getCards()[CardType.InvocatorPassive])
         }
+        cardViews[type]?.let {
+            return it!!
+        }
+        return listOf()
     }
 
     override fun setChatManager(aChatManager: ChatManager) {
