@@ -126,6 +126,34 @@
     "criticsInc": 0.0
   },
   {
+    "#class": "ResourcePassiveAptitude",
+    "id": "0000000",
+    "name": "toto",
+    "description": "The mighty toto",
+    "picturePath": "resources/spell/default.png",
+    "tick": 0,
+    "spiritCost": 0,
+    "goldIncome": 0,
+    "spiritIncome": 0,
+    "cooldown": 0
+  },
+  {
+    "#class": "ReinforcementPassiveAptitude",
+    "id": "0000000",
+    "name": "toto",
+    "description": "The mighty toto",
+    "picturePath": "resources/spell/default.png",
+    "tick": 0,
+    "spiritCost": 0,
+    "hpInc": 0,
+    "shieldInc": 0,
+    "armorInc": 0,
+    "resistanceInc": 0,
+    "attackInc": 0,
+    "criticsInc": 0.0,
+    "cooldown": 0
+  },
+  {
     "#class": "InvocatorAttackSpell",
     "id": "0000000",
     "name": "toto",
@@ -173,33 +201,5 @@
     "isForcedBack": false,
     "isForcedFront": false,
     "isTwoPlayerSwaping": false
-  },
-  {
-    "#class": "ResourcePassiveAptitude",
-    "id": "0000000",
-    "name": "toto",
-    "description": "The mighty toto",
-    "picturePath": "resources/spell/default.png",
-    "tick": 0,
-    "spiritCost": 0,
-    "goldIncome": 0,
-    "spiritIncome": 0,
-    "cooldown": 0
-  },
-  {
-    "#class": "ReinforcementPassiveAptitude",
-    "id": "0000000",
-    "name": "toto",
-    "description": "The mighty toto",
-    "picturePath": "resources/spell/default.png",
-    "tick": 0,
-    "spiritCost": 0,
-    "hpInc": 0,
-    "shieldInc": 0,
-    "armorInc": 0,
-    "resistanceInc": 0,
-    "attackInc": 0,
-    "criticsInc": 0.0,
-    "cooldown": 0
   }
 ]
