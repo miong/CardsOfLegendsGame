@@ -22,8 +22,10 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
     private lateinit var viewContainer: Table
     private lateinit var typeSelector: SelectBox<String>
 
-    init {
-        reset()
+    private val heroesCategory = "Heroes"
+    private val spellsCategory = "Spells"
+
+    fun init() {
     }
 
     fun getUI(): Table {
@@ -51,8 +53,8 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
             row()
             label("Type", "gold-title")
             typeSelector = selectBox<String> {
-                -"Heroes"
-                -"Spells"
+                -heroesCategory
+                -spellsCategory
             }.cell(expandX = true, fillX = true).apply {
                 addListener(object : ChangeListener() {
                     override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -70,54 +72,68 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
                 sp.expand().fill()
             }
         }
-        setCardListView("Heroes")
     }
 
     private fun setCardListView(type: String?) {
-        Gdx.app.postRunnable {
-            type?.let {
-                viewContainer.clear()
-                var count = 0;
-                for (cardView in presenter.getRootCards(it)) {
-                    val ui = scene2d.table {
-                        add(cardView.getMiniatureImage()).size(50f).align(Align.center)
-                        row()
-                        add(cardView.getNameLabel().apply {
-                            wrap = true
-                        }).size(75f, 15f)
-                    }.apply {
-                        setSize(75f, 70f)
-                    }
-                    ui.touchable = Touchable.enabled
-                    ui.addListener(object : ClickListener() {
-                        override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                            viewContainer.clear()
-                            cardView.resetLibraryView()
-                            viewContainer.add(cardView.getLibraryUI()).expand().fill().row()
-                            val closeBtn = scene2d.button {
-                                label("Return", "gold-title").apply {
-                                    setScale(0.5f)
-                                }
-                            }.apply {
-                                setSize(30f, 20f)
-                                addListener(object : ClickListener() {
-                                    override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                                        setCardListView(type)
-                                    }
-                                })
+        type?.let {
+            viewContainer.clear()
+            var count = 0;
+            for (cardView in presenter.getRootCards(it)) {
+                val ui = scene2d.table {
+                    add(cardView.getMiniatureImage()).size(50f).align(Align.center)
+                    row()
+                    add(cardView.getNameLabel().apply {
+                        wrap = true
+                    }).size(75f, 15f)
+                }.apply {
+                    setSize(75f, 70f)
+                }
+                ui.touchable = Touchable.enabled
+                ui.addListener(object : ClickListener() {
+                    override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                        viewContainer.clear()
+                        cardView.resetLibraryView()
+                        viewContainer.add(cardView.getLibraryUI()).expand().fill().row()
+                        val closeBtn = scene2d.button {
+                            label("Return", "gold-title").apply {
+                                setScale(0.5f)
                             }
-                            viewContainer.add(closeBtn).expandX().center()
+                        }.apply {
+                            setSize(30f, 20f)
+                            addListener(object : ClickListener() {
+                                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                                    setCardListView(type)
+                                }
+                            })
                         }
-                    })
-                    viewContainer.add(ui).size(75f, 70f).pad(5f)
-                    viewContainer.align(Align.top)
-                    count++
-                    if (count == 4) {
-                        viewContainer.row()
-                        count = 0
+                        viewContainer.add(closeBtn).expandX().center()
                     }
+                })
+                viewContainer.add(ui).size(75f, 70f).pad(5f)
+                viewContainer.align(Align.top)
+                count++
+                if (count == 4) {
+                    viewContainer.row()
+                    count = 0
                 }
             }
         }
+    }
+
+    fun loadCardView() {
+        //TODO fix lattency plus loading not visible.
+        // Need to split loader of views :/
+        Thread {
+            Gdx.app.postRunnable {
+                viewContainer.clear()
+                viewContainer.add(scene2d.label("Loading", "gold-title"))
+            }
+            Thread.sleep(1000)
+            Gdx.app.postRunnable {
+                //force load
+                presenter.getRootCards(heroesCategory)
+                setCardListView(heroesCategory)
+            }
+        }.start()
     }
 }

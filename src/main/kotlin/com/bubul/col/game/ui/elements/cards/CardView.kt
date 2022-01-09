@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.bubul.col.game.core.game.cards.*
-
 import com.bubul.col.game.ui.getGameResource
 import ktx.scene2d.image
 import ktx.scene2d.label
@@ -23,23 +22,29 @@ import org.slf4j.LoggerFactory
 
 open class CardView(private val card: CardBase) {
 
-    protected var libraryUITable: Table = scene2d.table {
-        image(TextureRegionDrawable(TextureRegion(Texture(getGameResource(card.picturePath))))) {
-            it.size(120f)
+    protected lateinit var libraryUITable: Table
+    private lateinit var miniature: Image
+    private lateinit var imageTexture: TextureRegionDrawable
+
+    open fun init() {
+        imageTexture = TextureRegionDrawable(TextureRegion(Texture(getGameResource(card.picturePath))))
+        libraryUITable = scene2d.table {
+            image(imageTexture) {
+                it.size(120f)
+            }
+            row()
+            label(card.name, "gold-title") {
+                it.padBottom(10f)
+            }
+            row()
+            label(card.description, "gold-title") {
+                it.padBottom(10f)
+            }
         }
-        row()
-        label(card.name, "gold-title") {
-            it.padBottom(10f)
-        }
-        row()
-        label(card.description, "gold-title") {
-            it.padBottom(10f)
-        }
-    }
-    protected var miniature: Image =
-        scene2d.image(TextureRegionDrawable(TextureRegion(Texture(getGameResource(card.picturePath))))) {
+        miniature = scene2d.image(TextureRegionDrawable(TextureRegion(Texture(getGameResource(card.picturePath))))) {
             setSize(50f, 50f)
         }
+    }
 
     fun getLibraryUI(): Table {
         return libraryUITable
@@ -63,7 +68,8 @@ open class CardView(private val card: CardBase) {
 }
 
 open class InvocationView(private val card: Invocation) : CardView(card) {
-    init {
+    override fun init() {
+        super.init()
         libraryUITable.row()
         libraryUITable.add(scene2d.table {
 
@@ -99,18 +105,19 @@ open class InvocationView(private val card: Invocation) : CardView(card) {
 }
 
 open class SorcererView(private val card: Sorcerer) : InvocationView(card) {
-    private val spellTable: Table
+    private lateinit var spellTable: Table
     private lateinit var spellDetailsContainer: Table
     private var spellDetails: Table = scene2d.table()
     private var selectedSpell: Image? = null
     private var spellSelectionImage: Image? = null
-    private var passiveTable: Table
+    private lateinit var passiveTable: Table
     private lateinit var passiveDetailsContainer: Table
     private var passiveDetails: Table = scene2d.table()
     private var selectedPassive: Image? = null
     private var passiveSelectionImage: Image? = null
 
-    init {
+    override fun init() {
+        super.init()
         spellTable = scene2d.table {
             table {
                 for (spell in card.spells) {
@@ -235,7 +242,8 @@ open class SorcererView(private val card: Sorcerer) : InvocationView(card) {
 class HeroCardView(private val card: Hero) : SorcererView(card)
 
 open class SpellView(private val card: SpellBase) : CardView(card) {
-    init {
+    override fun init() {
+        super.init()
         libraryUITable.row()
         libraryUITable.add(scene2d.table {
 
@@ -257,72 +265,83 @@ open class SpellView(private val card: SpellBase) : CardView(card) {
 
 open class HeroSpellView(private val card: SpellBase) : SpellView(card)
 open class ResourceSpellView(private val card: ResourceSpellBase) : HeroSpellView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addRessourcesElement(libraryUITable, card)
     }
 }
 
 class HeroStillResourceSpellView(private val card: StillResourceSpell) : ResourceSpellView(card)
 class HeroGrowingResourceSpellView(private val card: GrowingResourceSpell) : ResourceSpellView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addGrowingElement(libraryUITable, card)
     }
 }
 
 open class AttackSpellView(private val card: AttackSpellBase) : HeroSpellView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addAttackElement(libraryUITable, card)
     }
 }
 
 class HeroStillAttackSpellView(private val card: StillAttackSpell) : AttackSpellView(card)
 class HeroGrowingAttackSpellView(private val card: GrowingAttackSpell) : AttackSpellView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addGrowingElement(libraryUITable, card)
     }
 }
 
 open class DefenceSpellView(private val card: DefenceSpellBase) : HeroSpellView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addDefenceElement(libraryUITable, card)
     }
 }
 
 class HeroStillDefenseSpellView(private val card: StillDefenseSpell) : DefenceSpellView(card)
 class HeroGrowingDefenceSpellView(private val card: GrowingDefenceSpell) : DefenceSpellView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addGrowingElement(libraryUITable, card)
     }
 }
 
 open class ReinforcementSpellView(private val card: ReinforcementSpellBase) : HeroSpellView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addReinforcementElement(libraryUITable, card)
     }
 }
 
 class HeroStillReinforcementSpellView(private val card: StillReinforcementSpell) : ReinforcementSpellView(card)
 class HeroGrowingReinforcementSpellView(private val card: GrowingReinforcementSpell) : ReinforcementSpellView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addGrowingElement(libraryUITable, card)
     }
 }
 
 open class InvocatorSpellView(private val card: InvocatorSpellBase) : SpellView(card)
 open class InvocatorAttackSpellView(private val card: InvocatorAttackSpell) : InvocatorSpellView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addAttackElement(libraryUITable, card)
     }
 }
 
 open class InvocatorDefenceSpellView(private val card: InvocatorDefenceSpell) : InvocatorSpellView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addDefenceElement(libraryUITable, card)
     }
 }
 
 open class InvocatorResourceSpellView(private val card: InvocatorResourceSpell) : InvocatorSpellView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addRessourcesElement(libraryUITable, card)
     }
 }
@@ -330,7 +349,8 @@ open class InvocatorResourceSpellView(private val card: InvocatorResourceSpell) 
 open class InvocatorMoveSpellView(private val card: InvocatorMoveSpell) : InvocatorSpellView(card)
 
 open class PassiveAptitudeView(private val card: PassiveAptitude) : CardView(card) {
-    init {
+    override fun init() {
+        super.init()
         libraryUITable.row()
         libraryUITable.add(scene2d.table {
             image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-pause-64.png"))))) {
@@ -344,13 +364,15 @@ open class PassiveAptitudeView(private val card: PassiveAptitude) : CardView(car
 }
 
 class ResourcePassiveAptitudeView(private val card: ResourcePassiveAptitude) : PassiveAptitudeView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addRessourcesElement(libraryUITable, card)
     }
 }
 
 class ReinforcementPassiveAptitudeView(private val card: ReinforcementPassiveAptitude) : PassiveAptitudeView(card) {
-    init {
+    override fun init() {
+        super.init()
         CardElementBuilder.addReinforcementElement(libraryUITable, card)
     }
 }
@@ -519,6 +541,7 @@ class CardViewFactory {
                 is SpellBase -> SpellViewFactory.fromAnySpell(card)
                 else -> fromCardBase(card)
             }
+            view.init()
             cache[card.id] = view
             return view
         }
@@ -529,7 +552,7 @@ class CardViewFactory {
     }
 }
 
-class PassiveAptitudeViewFactory {
+private class PassiveAptitudeViewFactory {
     companion object {
         private val logger = LoggerFactory.getLogger(CardViewFactory::class.java)
 
@@ -558,7 +581,7 @@ class PassiveAptitudeViewFactory {
     }
 }
 
-class InvocationViewFactory {
+private class InvocationViewFactory {
     companion object {
         private val logger = LoggerFactory.getLogger(CardViewFactory::class.java)
 
@@ -593,7 +616,7 @@ class InvocationViewFactory {
     }
 }
 
-class SpellViewFactory {
+private class SpellViewFactory {
     companion object {
         private val logger = LoggerFactory.getLogger(CardViewFactory::class.java)
 

@@ -610,6 +610,7 @@ class DesktopScreen : KtxScreen {
         libraryElem.reset()
         containerTable.clear()
         containerTable.add(libraryElem.getUI()).expand().fill()
+        libraryElem.loadCardView()
     }
 
     fun clearMessages() {
@@ -934,6 +935,7 @@ class DesktopScreen : KtxScreen {
 
     fun initLibrary() {
         libraryElem = DesktopLibraryElem(presenter)
+        libraryElem.init()
         libraryBtn.isDisabled = false
     }
 }
