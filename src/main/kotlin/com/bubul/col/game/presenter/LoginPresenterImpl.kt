@@ -86,6 +86,10 @@ class LoginPresenterImpl(val game: GamePresenter, private val screen: LoginScree
         game.quitGame()
     }
 
+    override fun gameInitDone() {
+        screen.gameInitDone()
+    }
+
     override fun onLogin() {
         loginManager!!.login(login, pswd)
     }

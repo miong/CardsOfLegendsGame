@@ -26,6 +26,8 @@ class LoginScreen : KtxScreen {
 
     private lateinit var stage: Stage
     private lateinit var rootTable: Table
+    private lateinit var loginTable: Table
+    private lateinit var loadingTable: Table
     lateinit var loginBt: Button
     lateinit var registerBt: Button
     lateinit var loginText: TextField
@@ -39,8 +41,15 @@ class LoginScreen : KtxScreen {
 
     fun init() {
         stage = stage()
-        rootTable = scene2d.table {
-            setFillParent(true)
+        loadingTable = scene2d.table {
+            label("Loading", "gold-title") {
+                it.expand().center()
+            }
+        }
+        rootTable = scene2d.table()
+        rootTable.setFillParent(true)
+        rootTable.add(loadingTable).expand().fill()
+        loginTable = scene2d.table {
             label("Ping : ", "gold-title") {
                 it.padTop(10f)
                 it.right()
@@ -105,7 +114,7 @@ class LoginScreen : KtxScreen {
 
         })
         pswdText.setPasswordCharacter('*')
-        rootTable.touchable = Touchable.childrenOnly
+        loginTable.touchable = Touchable.childrenOnly
         loginBt.touchable = Touchable.enabled
         loginBt.isDisabled = true
         loginBt.addListener(object : ClickListener() {
@@ -128,8 +137,9 @@ class LoginScreen : KtxScreen {
         errorMessageDialog = Dialog("Failure", Scene2DSkin.defaultSkin)
         errorMessageDialog.button("OK")
         try {
-            val backgroundTex = Texture(getGameResource("login_back_image"))
-            rootTable.background = TextureRegionDrawable(TextureRegion(backgroundTex))
+            val backgroundTex = TextureRegionDrawable(TextureRegion(Texture(getGameResource("login_back_image"))))
+            loginTable.background = backgroundTex
+            loadingTable.background = backgroundTex
         } catch (e: Exception) {
             logger.error("Can't load resources")
             logger.error(e.toString())
@@ -197,5 +207,11 @@ class LoginScreen : KtxScreen {
             setPosition(this@LoginScreen.stage.width / 2 - width / 2, this@LoginScreen.stage.height / 2 - height / 2)
         }
         stage += window
+    }
+
+    fun gameInitDone() {
+        logger.info("Game Init done, set login screen")
+        rootTable.clear()
+        rootTable.add(loginTable).expand().fill()
     }
 }

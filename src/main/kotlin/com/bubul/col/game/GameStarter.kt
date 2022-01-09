@@ -26,6 +26,7 @@ class GameStarter {
         if (!initRes) {
             presenter.showInitializationError()
         }
+        presenter.GameInitDone()
     }
 
     fun quitGame() {
