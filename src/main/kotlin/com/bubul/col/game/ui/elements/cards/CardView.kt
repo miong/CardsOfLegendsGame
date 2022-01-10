@@ -1,9 +1,6 @@
 package com.bubul.col.game.ui.elements.cards
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Pixmap
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -13,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.bubul.col.game.core.game.cards.*
-import com.bubul.col.game.ui.getGameResource
+import com.bubul.col.game.ui.utils.TextureBuilder
 import ktx.scene2d.image
 import ktx.scene2d.label
 import ktx.scene2d.scene2d
@@ -27,7 +24,7 @@ open class CardView(private val card: CardBase) {
     private lateinit var imageTexture: TextureRegionDrawable
 
     open fun init() {
-        imageTexture = TextureRegionDrawable(TextureRegion(Texture(getGameResource(card.picturePath))))
+        imageTexture = TextureBuilder.getTextureRegionDrawable(card.picturePath)
         libraryUITable = scene2d.table {
             image(imageTexture) {
                 it.size(120f)
@@ -41,7 +38,7 @@ open class CardView(private val card: CardBase) {
                 it.padBottom(10f)
             }
         }
-        miniature = scene2d.image(TextureRegionDrawable(TextureRegion(Texture(getGameResource(card.picturePath))))) {
+        miniature = scene2d.image(imageTexture) {
             setSize(50f, 50f)
         }
     }
@@ -73,27 +70,27 @@ open class InvocationView(private val card: Invocation) : CardView(card) {
         libraryUITable.row()
         libraryUITable.add(scene2d.table {
 
-            image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-aimer-64.png"))))) {
+            image(TextureBuilder.getTextureRegionDrawable("icons/icons8-aimer-64.png")) {
                 it.size(30f)
             }
             label(card.maxHP.toString(), "gold-title") {
                 it.pad(2f)
             }
-            image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-épée-64.png"))))) {
+            image(TextureBuilder.getTextureRegionDrawable("icons/icons8-épée-64.png")) {
                 it.size(30f)
             }
             label(card.baseDamage.toString(), "gold-title") {
                 it.pad(2f)
             }
             row()
-            image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-plastron-d'armure-64.png"))))) {
+            image(TextureBuilder.getTextureRegionDrawable("icons/icons8-plastron-d'armure-64.png")) {
                 it.size(30f)
             }
             label(card.baseArmor.toString(), "gold-title")
             {
                 it.pad(2f)
             }
-            image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-bulle-64.png"))))) {
+            image(TextureBuilder.getTextureRegionDrawable("icons/icons8-bulle-64.png")) {
                 it.size(30f)
             }
             label(card.baseResistance.toString(), "gold-title")
@@ -122,7 +119,7 @@ open class SorcererView(private val card: Sorcerer) : InvocationView(card) {
             table {
                 for (spell in card.spells) {
                     table {
-                        image((TextureRegionDrawable(TextureRegion(Texture(getGameResource(spell.picturePath)))))) {
+                        image((TextureBuilder.getTextureRegionDrawable(spell.picturePath))) {
                             it.size(50f).pad(5f)
                             touchable = Touchable.enabled
                             addListener(object : ClickListener() {
@@ -137,14 +134,11 @@ open class SorcererView(private val card: Sorcerer) : InvocationView(card) {
                                         spellDetailsContainer.clear()
                                         spellDetails = CardViewFactory.fromAnyCard(spell).getLibraryUI()
 
-                                        val yellowHBandPixmap = Pixmap(50, 4, Pixmap.Format.RGBA8888)
-                                        yellowHBandPixmap.setColor(Color.GOLD)
-                                        yellowHBandPixmap.fill()
                                         val selectionTable = (selectedSpell!!.parent.getChild(1) as Table)
                                         spellSelectionImage?.remove()
                                         selectionTable.clear()
                                         spellSelectionImage =
-                                            Image(TextureRegionDrawable(TextureRegion(Texture(yellowHBandPixmap))))
+                                            Image(TextureBuilder.getColorFilledTextureRegionDrawable(50, 4, Color.GOLD))
                                         selectionTable.add(spellSelectionImage)
                                         showSpellDetail()
                                     }
@@ -163,7 +157,7 @@ open class SorcererView(private val card: Sorcerer) : InvocationView(card) {
             table {
                 for (passive in card.passives) {
                     table {
-                        image((TextureRegionDrawable(TextureRegion(Texture(getGameResource(passive.picturePath)))))) {
+                        image((TextureBuilder.getTextureRegionDrawable(passive.picturePath))) {
                             it.size(50f).pad(5f)
                             touchable = Touchable.enabled
                             addListener(object : ClickListener() {
@@ -178,14 +172,11 @@ open class SorcererView(private val card: Sorcerer) : InvocationView(card) {
                                         passiveDetailsContainer.clear()
                                         passiveDetails = CardViewFactory.fromAnyCard(passive).getLibraryUI()
 
-                                        val yellowHBandPixmap = Pixmap(50, 4, Pixmap.Format.RGBA8888)
-                                        yellowHBandPixmap.setColor(Color.GOLD)
-                                        yellowHBandPixmap.fill()
                                         val selectionTable = (selectedPassive!!.parent.getChild(1) as Table)
                                         passiveSelectionImage?.remove()
                                         selectionTable.clear()
                                         passiveSelectionImage =
-                                            Image(TextureRegionDrawable(TextureRegion(Texture(yellowHBandPixmap))))
+                                            Image(TextureBuilder.getColorFilledTextureRegionDrawable(50, 4, Color.GOLD))
                                         selectionTable.add(passiveSelectionImage)
                                         showPassiveDetail()
                                     }
@@ -247,13 +238,13 @@ open class SpellView(private val card: SpellBase) : CardView(card) {
         libraryUITable.row()
         libraryUITable.add(scene2d.table {
 
-            image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-hourglass-64.png"))))) {
+            image(TextureBuilder.getTextureRegionDrawable("icons/icons8-hourglass-64.png")) {
                 it.size(30f)
             }
             label(card.tick.toString(), "gold-title") {
                 it.pad(2f)
             }
-            image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-energy-64.png"))))) {
+            image(TextureBuilder.getTextureRegionDrawable("icons/icons8-energy-64.png")) {
                 it.size(30f)
             }
             label(card.spiritCost.toString(), "gold-title") {
@@ -353,7 +344,7 @@ open class PassiveAptitudeView(private val card: PassiveAptitude) : CardView(car
         super.init()
         libraryUITable.row()
         libraryUITable.add(scene2d.table {
-            image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-pause-64.png"))))) {
+            image(TextureBuilder.getTextureRegionDrawable("icons/icons8-pause-64.png")) {
                 it.size(30f)
             }
             label(card.cooldown.toString(), "gold-title") {
@@ -382,13 +373,13 @@ class CardElementBuilder {
         fun addRessourcesElement(libraryUITable: Table, card: ResourceSpellBase) {
             libraryUITable.row()
             libraryUITable.add(scene2d.table {
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-gold-bars-increase-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-gold-bars-increase-64.png")) {
                     it.size(30f)
                 }
                 label(card.goldIncome.toString(), "gold-title") {
                     it.pad(2f)
                 }
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-energy-increase-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-energy-increase-64.png")) {
                     it.size(30f)
                 }
                 label(card.spiritIncome.toString(), "gold-title") {
@@ -400,13 +391,13 @@ class CardElementBuilder {
         fun addAttackElement(libraryUITable: Table, card: AttackSpellBase) {
             libraryUITable.row()
             libraryUITable.add(scene2d.table {
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-épée-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-épée-64.png")) {
                     it.size(30f)
                 }
                 label(card.baseDamage.toString(), "gold-title") {
                     it.pad(2f)
                 }
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-bandage-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-bandage-64.png")) {
                     it.size(30f)
                 }
                 label(card.baseInjury.toString(), "gold-title") {
@@ -419,7 +410,7 @@ class CardElementBuilder {
             libraryUITable.row()
             libraryUITable.add(scene2d.table {
                 table {
-                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-bandage-64.png"))))) {
+                    image(TextureBuilder.getTextureRegionDrawable("icons/icons8-bandage-64.png")) {
                         it.size(30f)
                     }
                     label(card.baseInjury.toString(), "gold-title") {
@@ -428,19 +419,19 @@ class CardElementBuilder {
                 }
                 row()
                 table {
-                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-medicine-65.png"))))) {
+                    image(TextureBuilder.getTextureRegionDrawable("icons/icons8-medicine-65.png")) {
                         it.size(30f)
                     }
                     label(card.baseHealing.toString(), "gold-title") {
                         it.pad(2f)
                     }
-                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-plastron-d'armure-64.png"))))) {
+                    image(TextureBuilder.getTextureRegionDrawable("icons/icons8-plastron-d'armure-64.png")) {
                         it.size(30f)
                     }
                     label(card.baseArmorInc.toString(), "gold-title") {
                         it.pad(2f)
                     }
-                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-bulle-64.png"))))) {
+                    image(TextureBuilder.getTextureRegionDrawable("icons/icons8-bulle-64.png")) {
                         it.size(30f)
                     }
                     label(card.baseResistanceInc.toString(), "gold-title") {
@@ -453,13 +444,13 @@ class CardElementBuilder {
         fun addGrowingElement(libraryUITable: Table, card: GrowingSpell) {
             libraryUITable.row()
             libraryUITable.add(scene2d.table {
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-ange-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-ange-64.png")) {
                     it.size(30f)
                 }
                 label(card.lightFactor.toString(), "gold-title") {
                     it.pad(2f)
                 }
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-diabolique-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-diabolique-64.png")) {
                     it.size(30f)
                 }
                 label(card.darkFactor.toString(), "gold-title") {
@@ -471,39 +462,39 @@ class CardElementBuilder {
         fun addReinforcementElement(libraryUITable: Table, card: ReinforcementSpellBase) {
             libraryUITable.row()
             libraryUITable.add(scene2d.table {
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-aimer-increase-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-aimer-increase-64.png")) {
                     it.size(30f)
                 }
                 label(card.hpInc.toString(), "gold-title") {
                     it.pad(2f)
                 }
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-shield-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-shield-64.png")) {
                     it.size(30f)
                 }
                 label(card.shieldInc.toString(), "gold-title") {
                     it.pad(2f)
                 }
                 row()
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-plastron-d'armure-increase-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-plastron-d'armure-increase-64.png")) {
                     it.size(30f)
                 }
                 label(card.armorInc.toString(), "gold-title") {
                     it.pad(2f)
                 }
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-bulle-increase-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-bulle-increase-64.png")) {
                     it.size(30f)
                 }
                 label(card.resistanceInc.toString(), "gold-title") {
                     it.pad(2f)
                 }
                 row()
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-épée-increase-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-épée-increase-64.png")) {
                     it.size(30f)
                 }
                 label(card.attackInc.toString(), "gold-title") {
                     it.pad(2f)
                 }
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-explosion-increase-64.png"))))) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-explosion-increase-64.png")) {
                     it.size(30f)
                 }
                 label(card.criticsInc.toString(), "gold-title") {

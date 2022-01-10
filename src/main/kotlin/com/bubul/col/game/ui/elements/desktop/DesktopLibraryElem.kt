@@ -1,9 +1,7 @@
 package com.bubul.col.game.ui.elements.desktop
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Pixmap
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
@@ -11,9 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.bubul.col.game.presenter.DesktopPresenter
+import com.bubul.col.game.ui.utils.TextureBuilder
 import ktx.scene2d.*
 
 class DesktopLibraryElem(val presenter: DesktopPresenter) {
@@ -34,11 +32,7 @@ class DesktopLibraryElem(val presenter: DesktopPresenter) {
 
     fun reset() {
         container = scene2d.table {
-            val pixmap = Pixmap(20, 20, Pixmap.Format.RGBA8888).apply {
-                setColor(0f, 0f, 0f, 0.5f)
-                fill()
-            }
-            background = TextureRegionDrawable(TextureRegion(Texture(pixmap)))
+            background = TextureBuilder.getColorFilledTextureRegionDrawable(20, 20, Color(0f, 0f, 0f, 0.5f))
             button {
                 label("Close", "gold-title")
                 it.colspan(2)

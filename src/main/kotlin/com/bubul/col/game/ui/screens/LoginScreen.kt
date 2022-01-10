@@ -2,9 +2,6 @@ package com.bubul.col.game.ui.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Pixmap
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -12,10 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.bubul.col.game.presenter.LoginPresenter
-import com.bubul.col.game.ui.getGameResource
+import com.bubul.col.game.ui.utils.TextureBuilder
 import ktx.actors.plusAssign
 import ktx.actors.stage
 import ktx.app.KtxScreen
@@ -137,7 +133,7 @@ class LoginScreen : KtxScreen {
         errorMessageDialog = Dialog("Failure", Scene2DSkin.defaultSkin)
         errorMessageDialog.button("OK")
         try {
-            val backgroundTex = TextureRegionDrawable(TextureRegion(Texture(getGameResource("login_back_image"))))
+            val backgroundTex = TextureBuilder.getTextureRegionDrawable("login_back_image")
             loginTable.background = backgroundTex
             loadingTable.background = backgroundTex
         } catch (e: Exception) {
@@ -196,10 +192,7 @@ class LoginScreen : KtxScreen {
                 it.expand().fill()
             }.apply {
                 setFillParent(true)
-                val backPixmap = Pixmap(16, 16, Pixmap.Format.RGBA8888)
-                backPixmap.setColor(Color.FIREBRICK)
-                backPixmap.fill()
-                background = TextureRegionDrawable(TextureRegion(Texture(backPixmap)))
+                background = TextureBuilder.getColorFilledTextureRegionDrawable(16, 16, Color.FIREBRICK)
             }
         }.apply {
             isModal = true

@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -16,18 +15,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
-import com.bubul.col.game.core.utils.DecomposedGifSprite
 import com.bubul.col.game.core.utils.LiveData
 import com.bubul.col.game.core.utils.LiveDataListener
-import com.bubul.col.game.core.utils.loadDecomposedGif
 import com.bubul.col.game.presenter.DesktopPresenter
 import com.bubul.col.game.ui.elements.desktop.DesktopGameTypeSelectorElem
 import com.bubul.col.game.ui.elements.desktop.DesktopLibraryElem
 import com.bubul.col.game.ui.elements.desktop.DesktopLobbyElem
 import com.bubul.col.game.ui.elements.desktop.DesktopUpdatesElem
 import com.bubul.col.game.ui.getGameResource
+import com.bubul.col.game.ui.utils.DecomposedGifSprite
+import com.bubul.col.game.ui.utils.TextureBuilder
+import com.bubul.col.game.ui.utils.loadDecomposedGif
 import ktx.actors.plusAssign
 import ktx.actors.stage
 import ktx.app.KtxScreen
@@ -155,11 +154,7 @@ class DesktopScreen : KtxScreen {
                     it.fill()
                 }
                 chatTable = table {
-                    val pixmap = Pixmap(20, 20, Pixmap.Format.RGBA8888).apply {
-                        setColor(0f, 0f, 0f, 0.5f)
-                        fill()
-                    }
-                    background = TextureRegionDrawable(TextureRegion(Texture(pixmap)))
+                    background = TextureBuilder.getColorFilledTextureRegionDrawable(20, 20, Color(0f, 0f, 0f, 0.5f))
                     touchable = Touchable.childrenOnly
                     chatUsernameLabel = label("", "gold-title") {
                         it.expandX()
@@ -170,7 +165,7 @@ class DesktopScreen : KtxScreen {
                         this.fontScaleX = 0.6f
                     }
                     button {
-                        image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-subtract-30.png")))))
+                        image(TextureBuilder.getTextureRegionDrawable("icons/icons8-subtract-30.png"))
                         it.size(50f)
                         addListener(object : ClickListener() {
                             override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -215,7 +210,7 @@ class DesktopScreen : KtxScreen {
                     this.fontScaleX = 0.6f
                 }
                 button {
-                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/flaticon_income.png"))))) {
+                    image(TextureBuilder.getTextureRegionDrawable("icons/flaticon_income.png")) {
                         it.size(20f)
                         it.padRight(3f)
                     }
@@ -242,7 +237,7 @@ class DesktopScreen : KtxScreen {
                     this.align(Align.left)
                 }
                 button {
-                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-plus-+-24.png")))))
+                    image(TextureBuilder.getTextureRegionDrawable("icons/icons8-plus-+-24.png"))
                     it.width(50f)
                     it.height(50f)
                     addListener(object : ClickListener() {
@@ -274,7 +269,7 @@ class DesktopScreen : KtxScreen {
                                         it.expandX().fillX()
                                     }
                                     button {
-                                        image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-plus-+-24.png")))))
+                                        image(TextureBuilder.getTextureRegionDrawable("icons/icons8-plus-+-24.png"))
                                         addListener(object : ClickListener() {
                                             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                                                 presenter.sendFriendRequest(newFriendName.text)
@@ -368,13 +363,9 @@ class DesktopScreen : KtxScreen {
         playBtn.isDisabled = true
         libraryBtn.isDisabled = true
         chatTable.isVisible = false
-        val blueBackPixmap = Pixmap(16, 16, Pixmap.Format.RGBA8888)
-        blueBackPixmap.setColor(Color.FIREBRICK)
-        blueBackPixmap.fill()
-        friendTable.background = TextureRegionDrawable(TextureRegion(Texture(blueBackPixmap)))
+        friendTable.background = TextureBuilder.getColorFilledTextureRegionDrawable(16, 16, Color.FIREBRICK)
         try {
-            val backgroundTex = Texture(getGameResource("login_back_image"))
-            contentTable.background = TextureRegionDrawable(TextureRegion(backgroundTex))
+            contentTable.background = TextureBuilder.getTextureRegionDrawable("login_back_image")
         } catch (e: Exception) {
             logger.error("Can't load resources")
             logger.error(e.toString())
@@ -657,7 +648,7 @@ class DesktopScreen : KtxScreen {
                 this.fontScaleX = 0.6f
             }
             button {
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-plus-+-24.png")))))
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-plus-+-24.png"))
                 it.width(50f)
                 it.height(50f)
                 addListener(object : ClickListener() {
@@ -670,7 +661,7 @@ class DesktopScreen : KtxScreen {
                 })
             }
             button {
-                image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-subtract-30.png")))))
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-subtract-30.png"))
                 it.width(50f)
                 it.height(50f)
                 addListener(object : ClickListener() {
@@ -879,7 +870,7 @@ class DesktopScreen : KtxScreen {
                             nopeButton.isDisabled = true
                             matchMakingProposalHeartTable.remove()
                             matchMakingProposalTimerTable.add(
-                                scene2d.image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-approbation-48.png")))))
+                                scene2d.image(TextureBuilder.getTextureRegionDrawable("icons/icons8-approbation-48.png"))
                             )
                             presenter.acceptGameProposal()
                         }

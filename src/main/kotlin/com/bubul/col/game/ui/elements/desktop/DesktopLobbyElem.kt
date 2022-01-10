@@ -1,17 +1,14 @@
 package com.bubul.col.game.ui.elements.desktop
 
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Button
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
-import com.bubul.col.game.core.utils.loadDecomposedGif
 import com.bubul.col.game.presenter.DesktopPresenter
-import com.bubul.col.game.ui.getGameResource
+import com.bubul.col.game.ui.utils.TextureBuilder
+import com.bubul.col.game.ui.utils.loadDecomposedGif
 import ktx.scene2d.*
 
 class DesktopLobbyElem(val presenter: DesktopPresenter) {
@@ -34,7 +31,7 @@ class DesktopLobbyElem(val presenter: DesktopPresenter) {
             row()
             adversaryLabel = label("???????", "gold-title")
             row()
-            image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-player-versus-player-64.png")))))
+            image(TextureBuilder.getTextureRegionDrawable("icons/icons8-player-versus-player-64.png"))
             row()
             myLabel = label("Player", "gold-title") {
                 it.padBottom(40f)
@@ -48,7 +45,7 @@ class DesktopLobbyElem(val presenter: DesktopPresenter) {
                     it.padRight(10f)
                 }
                 invitedAdversaryStatusImage =
-                    image(TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-annuler-48.png"))))) {
+                    image(TextureBuilder.getTextureRegionDrawable("icons/icons8-annuler-48.png")) {
                         it.size(50f)
                     }
                 it.expandX().fillX()
@@ -113,7 +110,7 @@ class DesktopLobbyElem(val presenter: DesktopPresenter) {
     fun invitedAdversaryRefused(name: String) {
         invitedAdversaryLabel.setText(name)
         invitedAdversaryStatusImage.drawable =
-            TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-annuler-48.png"))))
+            TextureBuilder.getTextureRegionDrawable("icons/icons8-annuler-48.png")
         invitedAdversaryStatusImage.invalidateHierarchy()
         inviteTable.isVisible = true
     }
@@ -122,7 +119,7 @@ class DesktopLobbyElem(val presenter: DesktopPresenter) {
         adversaryLabel.setText(name)
         invitedAdversaryLabel.setText(name)
         invitedAdversaryStatusImage.drawable =
-            TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-approbation-48.png"))))
+            TextureBuilder.getTextureRegionDrawable("icons/icons8-approbation-48.png")
         invitedAdversaryStatusImage.invalidateHierarchy()
         inviteTable.isVisible = true
     }
@@ -130,7 +127,7 @@ class DesktopLobbyElem(val presenter: DesktopPresenter) {
     fun invitedAdversaryLeft(name: String) {
         adversaryLabel.setText(name)
         invitedAdversaryStatusImage.drawable =
-            TextureRegionDrawable(TextureRegion(Texture(getGameResource("icons/icons8-annuler-48.png"))))
+            TextureBuilder.getTextureRegionDrawable("icons/icons8-annuler-48.png")
         invitedAdversaryStatusImage.invalidateHierarchy()
         inviteTable.isVisible = true
     }

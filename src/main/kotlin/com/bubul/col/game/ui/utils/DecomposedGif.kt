@@ -1,4 +1,4 @@
-package com.bubul.col.game.core.utils
+package com.bubul.col.game.ui.utils
 
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
