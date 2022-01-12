@@ -76,7 +76,7 @@ open class InvocationView(private val card: Invocation) : CardView(card) {
             label(card.maxHP.toString(), "gold-title") {
                 it.pad(2f)
             }
-            image(TextureBuilder.getTextureRegionDrawable("icons/icons8-épée-64.png")) {
+            image(TextureBuilder.getTextureRegionDrawable("icons/icons8-epee-64.png")) {
                 it.size(30f)
             }
             label(card.baseDamage.toString(), "gold-title") {
@@ -391,7 +391,7 @@ class CardElementBuilder {
         fun addAttackElement(libraryUITable: Table, card: AttackSpellBase) {
             libraryUITable.row()
             libraryUITable.add(scene2d.table {
-                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-épée-64.png")) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-epee-64.png")) {
                     it.size(30f)
                 }
                 label(card.baseDamage.toString(), "gold-title") {
@@ -488,7 +488,7 @@ class CardElementBuilder {
                     it.pad(2f)
                 }
                 row()
-                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-épée-increase-64.png")) {
+                image(TextureBuilder.getTextureRegionDrawable("icons/icons8-epee-increase-64.png")) {
                     it.size(30f)
                 }
                 label(card.attackInc.toString(), "gold-title") {
